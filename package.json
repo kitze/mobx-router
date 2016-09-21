@@ -4,7 +4,7 @@
   "description": "A simple router for MobX",
   "main": "dist/mobx-router.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "./node_modules/rollup-babel-lib-bundler/bin/index.js index.js"
   },
   "repository": {
@@ -24,11 +24,11 @@
   },
   "homepage": "https://github.com/kitze/mobx-router#readme",
   "dependencies": {
-    "lodash": "4.16.1",
+    "babel-runtime": "^6.11.6",
     "director": "1.2.8",
-    "react": "15.3.2",
     "mobx": "2.5.1",
-    "mobx-react": "3.5.6"
+    "mobx-react": "3.5.6",
+    "react": "15.3.2"
   },
   "peerDependencies": {
     "react": "15.x",
@@ -36,9 +36,16 @@
     "mobx-react": "^3.5.6"
   },
   "devDependencies": {
+    "babel-jest": "^15.0.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-decorators-legacy": "1.3.4",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-polyfill": "^6.13.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-es2015-rollup": "^1.2.0",
     "babel-preset-react": "6.11.1",
-    "babel-preset-stage-1": "6.13.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "jest-cli": "^15.1.1",
     "rollup-babel-lib-bundler": "3.1.0"
   },
   "rollupBabelLibBundler": {
@@ -46,12 +53,21 @@
     "dest": "dist",
     "babel": {
       "presets": [
-        "stage-1",
-        "react"
+        "es2015-rollup",
+        "react",
+        "stage-0"
       ],
       "plugins": [
-        "transform-decorators-legacy"
+        "transform-decorators-legacy",
+        "add-module-exports"
       ]
     }
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ]
   }
 }
