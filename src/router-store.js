@@ -1,19 +1,15 @@
-import {extendObservable, action, toJS} from 'mobx';
+import {observable, computed, action, toJS} from 'mobx';
 
 class Router {
 
-  params = {};
-  currentView;
+  @observable params = {};
+  @observable currentView;
 
   constructor() {
-    extendObservable(this, {
-      currentView: undefined,
-      params: undefined,
-      currentPath: () => this.currentView ? this.currentView.replaceUrlParams(this.params) : ''
-    });
+    this.goTo = this.goTo.bind(this);
   }
 
-  goTo = action((view, paramsObj, store) => {
+  @action goTo(view, paramsObj, store) {
 
     const rootViewChanged = !this.currentView || (this.currentView.rootPath !== view.rootPath);
 
@@ -33,8 +29,11 @@ class Router {
     this.params = toJS(paramsObj);
 
     rootViewChanged && view.onEnter && view.onEnter(view, this.params, store);
-  });
+  }
 
+  @computed get currentPath() {
+    return this.currentView ? this.currentView.replaceUrlParams(this.params) : '';
+  }
 }
 
 export default Router;
