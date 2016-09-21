@@ -58,8 +58,7 @@
         "stage-0"
       ],
       "plugins": [
-        "transform-decorators-legacy",
-        "add-module-exports"
+        "transform-decorators-legacy"
       ]
     }
   },
