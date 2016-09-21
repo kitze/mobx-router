@@ -11,9 +11,9 @@ v0.0.1 🎉 - by [@thekitze](https://twitter.com/kitze)
 - Navigating to another view happens by calling the ```goTo``` method on the router store, and the changes in the url are reflected automatically. So for example you can call ```router.goTo(views.book, {id:5, page:3})``` and after the change is made in the store, the URL change will follow. You never directly manipulate the URL or the history object.
 - ```<Link>``` component which also populates the href attribute and works with middle click or ```cmd/ctrl``` + click
 
-
 ###Example usage
-[https://github.com/kitze/mobx-router-example](https://github.com/kitze/mobx-router-example)
+[Demo project](http://mobx-router-example.surge.sh/)
+[Demo project repo](https://github.com/kitze/mobx-router-example)
 
 ### Implementation
 ```js
