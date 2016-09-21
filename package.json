@@ -1,0 +1,31 @@
+{
+  "name": "mobx-router",
+  "version": "0.0.1",
+  "description": "A simple router for MobX",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kitze/mobx-router.git"
+  },
+  "keywords": [
+    "mobx",
+    "router",
+    "react"
+  ],
+  "author": "Kitze <kristijan.mkd@gmail.com> (http://kitze.rocks/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kitze/mobx-router/issues"
+  },
+  "homepage": "https://github.com/kitze/mobx-router#readme",
+  "dependencies": {
+    "lodash": "^4.16.1",
+    "mobx": "^2.5.1",
+    "mobx-react": "^3.5.6",
+    "react": "^15.3.2",
+    "director": "^1.2.8"
+  }
+}
