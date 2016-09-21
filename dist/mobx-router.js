@@ -9,26 +9,15 @@ var director = require('director');
 var React = _interopDefault(require('react'));
 var mobxReact = require('mobx-react');
 
-var mapAndFilter = function mapAndFilter(array, condition, modification) {
-  return array.reduce(function (results, member) {
-    condition(member) && results.push(modification(member));
-    return results;
-  }, []);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
 };
 
-var viewsForDirector = function viewsForDirector(views, store) {
-  return Object.keys(views).reduce(function (obj, viewKey) {
-    var view = views[viewKey];
-    obj[view.path] = function () {
-      for (var _len = arguments.length, paramsArr = Array(_len), _key = 0; _key < _len; _key++) {
-        paramsArr[_key] = arguments[_key];
-      }
 
-      return view.goTo(store, paramsArr);
-    };
-    return obj;
-  }, {});
-};
+
+
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -137,6 +126,34 @@ var set = function set(object, property, value, receiver) {
   return value;
 };
 
+var isObject = function isObject(obj) {
+  return obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && !Array.isArray(obj);
+};
+var getObjectKeys = function getObjectKeys(obj) {
+  return isObject(obj) ? Object.keys(obj) : [];
+};
+
+var mapAndFilter = function mapAndFilter(array, condition, modification) {
+  return array.reduce(function (results, member) {
+    condition(member) && results.push(modification(member));
+    return results;
+  }, []);
+};
+
+var viewsForDirector = function viewsForDirector(views, store) {
+  return getObjectKeys(views).reduce(function (obj, viewKey) {
+    var view = views[viewKey];
+    obj[view.path] = function () {
+      for (var _len = arguments.length, paramsArr = Array(_len), _key = 0; _key < _len; _key++) {
+        paramsArr[_key] = arguments[_key];
+      }
+
+      return view.goTo(store, paramsArr);
+    };
+    return obj;
+  }, {});
+};
+
 var Route = function () {
 
   //lifecycle methods
@@ -145,7 +162,7 @@ var Route = function () {
 
     classCallCheck(this, Route);
 
-    Object.keys(props).forEach(function (propKey) {
+    getObjectKeys(props).forEach(function (propKey) {
       return _this[propKey] = props[propKey];
     });
     this.rootPath = this.getRootPath();
@@ -180,7 +197,7 @@ var Route = function () {
      Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
      */
     value: function replaceUrlParams(params) {
-      return Object.keys(params).reduce(function (path, paramKey) {
+      return getObjectKeys(params).reduce(function (path, paramKey) {
         var value = params[paramKey];
         return path.replace(':' + paramKey, value);
       }, this.path);
@@ -217,8 +234,6 @@ var Route = function () {
   }]);
   return Route;
 }();
-
-module.exports = exports['default'];
 
 var _class;
 var _descriptor;
@@ -263,9 +278,9 @@ function _applyDecoratedDescriptor(target, property, decorators, descriptor, con
   return desc;
 }
 
-var Router$1 = (_class = function () {
-  function Router$$1() {
-    classCallCheck(this, Router$$1);
+var RouterStore = (_class = function () {
+  function RouterStore() {
+    classCallCheck(this, RouterStore);
 
     _initDefineProp(this, 'params', _descriptor, this);
 
@@ -274,7 +289,7 @@ var Router$1 = (_class = function () {
     this.goTo = this.goTo.bind(this);
   }
 
-  createClass(Router$$1, [{
+  createClass(RouterStore, [{
     key: 'goTo',
     value: function goTo(view, paramsObj, store) {
 
@@ -303,7 +318,7 @@ var Router$1 = (_class = function () {
       return this.currentView ? this.currentView.replaceUrlParams(this.params) : '';
     }
   }]);
-  return Router$$1;
+  return RouterStore;
 }(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'params', [mobx.observable], {
   enumerable: true,
   initializer: function initializer() {
@@ -313,9 +328,6 @@ var Router$1 = (_class = function () {
   enumerable: true,
   initializer: null
 }), _applyDecoratedDescriptor(_class.prototype, 'goTo', [mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
-
-
-module.exports = exports['default'];
 
 var createDirectorRouter = function createDirectorRouter(views, store) {
   new director.Router(_extends({}, viewsForDirector(views, store))).configure({
@@ -337,8 +349,6 @@ var startRouter = function startRouter(views, store) {
   });
 };
 
-module.exports = exports['default'];
-
 var MobxRouter = function MobxRouter(_ref) {
   var router = _ref.store.router;
   return React.createElement(
@@ -348,7 +358,6 @@ var MobxRouter = function MobxRouter(_ref) {
   );
 };
 var MobxRouter$1 = mobxReact.observer(['store'], MobxRouter);
-module.exports = exports['default'];
 
 var Link = function Link(_ref) {
   var view = _ref.view;
@@ -392,12 +401,11 @@ var Link = function Link(_ref) {
 };
 
 var Link$1 = mobxReact.observer(Link);
-module.exports = exports['default'];
 
 //components
 
 exports.Route = Route;
 exports.MobxRouter = MobxRouter$1;
 exports.Link = Link$1;
-exports.RouterStore = Router$1;
+exports.RouterStore = RouterStore;
 exports.startRouter = startRouter;
