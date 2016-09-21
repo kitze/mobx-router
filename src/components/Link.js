@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {observer} from 'mobx-react';
 
-const Link = ({view, params = {}, store = {}, removeStyle = false, refresh = false, style = {}, children, title = children, router:importedRouter}) => {
-  const router = importedRouter || store.router;
+const Link = ({view, params = {}, store = {}, removeStyle = false, refresh = false, style = {}, children, title = children, router = store.router}) => {
   if (!router) {
     return console.error('The router prop must be defined for a Link component to work!')
   }
