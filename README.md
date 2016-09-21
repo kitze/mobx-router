@@ -44,7 +44,8 @@ ReactDOM.render(
 ```
 
 ###Example config
-```/config/views.js```
+
+/config/views.js
 
 ```js
 import React from 'react';
