@@ -18,33 +18,18 @@ const viewsForDirector = (views, store) => reduce(views, (obj, view) => {
   return obj;
 }, {});
 
-class Route {
+let Route = class Route {
 
   //lifecycle methods
   constructor(props) {
-    this.getRootPath = () => `/${ this.path.split('/')[1] }`;
-
-    this.replaceUrlParams = params => reduce(params, (path, value, key) => path.replace(`:${ key }`, value), this.path);
-
-    this.getParamsObject = paramsArray => {
-
-      let params = mapAndFilter(this.path.split('/'), p => p.indexOf(':') !== -1, p => p.substr(1, p.length - 1));
-
-      const result = reduce(paramsArray, (obj, paramValue, index) => {
-        obj[params[index]] = paramValue;
-        return obj;
-      }, {});
-
-      return result;
-    };
-
-    this.goTo = (store, paramsArr) => {
-      const paramsObject = this.getParamsObject(paramsArr);
-      store.router.goTo(this, paramsObject, store);
-    };
-
     each(props, (value, key) => this[key] = value);
     this.rootPath = this.getRootPath();
+
+    //bind
+    this.getRootPath = this.getRootPath.bind(this);
+    this.replaceUrlParams = this.replaceUrlParams.bind(this);
+    this.getParamsObject = this.getParamsObject.bind(this);
+    this.goTo = this.goTo.bind(this);
   }
 
   /*
@@ -54,54 +39,126 @@ class Route {
 
 
   //props
-
+  getRootPath() {
+    return `/${ this.path.split('/')[1] }`;
+  }
 
   /*
    replaces url params placeholders with params from an object
    Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
    */
-
+  replaceUrlParams(params) {
+    return reduce(params, (path, value, key) => path.replace(`:${ key }`, value), this.path);
+  }
 
   /*
    converts an array of params [123, 100] to an object
    Example: if the current this.path is /book/:id/page/:pageId it will return {id:123, pageId:100}
    */
-}
+  getParamsObject(paramsArray) {
 
-class Router$1 {
+    let params = mapAndFilter(this.path.split('/'), p => p.indexOf(':') !== -1, p => p.substr(1, p.length - 1));
 
-  constructor() {
-    this.params = {};
-    this.goTo = mobx.action((view, paramsObj, store) => {
+    const result = reduce(paramsArray, (obj, paramValue, index) => {
+      obj[params[index]] = paramValue;
+      return obj;
+    }, {});
 
-      const rootViewChanged = !this.currentView || this.currentView.rootPath !== view.rootPath;
-
-      const beforeExitResult = rootViewChanged && this.currentView && this.currentView.beforeExit ? this.currentView.beforeExit(this.currentView, this.params, store) : true;
-      if (beforeExitResult === false) {
-        return;
-      }
-
-      const beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, this.params, store) : true;
-      if (beforeEnterResult === false) {
-        return;
-      }
-
-      rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, this.params, store);
-
-      this.currentView = view;
-      this.params = mobx.toJS(paramsObj);
-
-      rootViewChanged && view.onEnter && view.onEnter(view, this.params, store);
-    });
-
-    mobx.extendObservable(this, {
-      currentView: undefined,
-      params: undefined,
-      currentPath: () => this.currentView ? this.currentView.replaceUrlParams(this.params) : ''
-    });
+    return result;
   }
 
+  goTo(store, paramsArr) {
+    const paramsObject = this.getParamsObject(paramsArr);
+    store.router.goTo(this, paramsObject, store);
+  }
+};
+
+var _class;
+var _descriptor;
+var _descriptor2;
+function _initDefineProp(target, property, descriptor, context) {
+  if (!descriptor) return;
+  Object.defineProperty(target, property, {
+    enumerable: descriptor.enumerable,
+    configurable: descriptor.configurable,
+    writable: descriptor.writable,
+    value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+  });
 }
+
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+  var desc = {};
+  Object['ke' + 'ys'](descriptor).forEach(function (key) {
+    desc[key] = descriptor[key];
+  });
+  desc.enumerable = !!desc.enumerable;
+  desc.configurable = !!desc.configurable;
+
+  if ('value' in desc || desc.initializer) {
+    desc.writable = true;
+  }
+
+  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+    return decorator(target, property, desc) || desc;
+  }, desc);
+
+  if (context && desc.initializer !== void 0) {
+    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+    desc.initializer = undefined;
+  }
+
+  if (desc.initializer === void 0) {
+    Object['define' + 'Property'](target, property, desc);
+    desc = null;
+  }
+
+  return desc;
+}
+
+let Router$1 = (_class = class Router {
+
+  constructor() {
+    _initDefineProp(this, 'params', _descriptor, this);
+
+    _initDefineProp(this, 'currentView', _descriptor2, this);
+
+    this.goTo = this.goTo.bind(this);
+  }
+
+  goTo(view, paramsObj, store) {
+
+    const rootViewChanged = !this.currentView || this.currentView.rootPath !== view.rootPath;
+
+    const beforeExitResult = rootViewChanged && this.currentView && this.currentView.beforeExit ? this.currentView.beforeExit(this.currentView, this.params, store) : true;
+    if (beforeExitResult === false) {
+      return;
+    }
+
+    const beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, this.params, store) : true;
+    if (beforeEnterResult === false) {
+      return;
+    }
+
+    rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, this.params, store);
+
+    this.currentView = view;
+    this.params = mobx.toJS(paramsObj);
+
+    rootViewChanged && view.onEnter && view.onEnter(view, this.params, store);
+  }
+
+  get currentPath() {
+    return this.currentView ? this.currentView.replaceUrlParams(this.params) : '';
+  }
+}, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'params', [mobx.observable], {
+  enumerable: true,
+  initializer: function () {
+    return {};
+  }
+}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'currentView', [mobx.observable], {
+  enumerable: true,
+  initializer: null
+}), _applyDecoratedDescriptor(_class.prototype, 'goTo', [mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
