@@ -1,6 +1,6 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('lodash/fp/reduce'), require('lodash/fp/each'), require('mobx'), require('director'), require('react'), require('mobx-react')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'lodash/fp/reduce', 'lodash/fp/each', 'mobx', 'director', 'react', 'mobx-react'], factory) :
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('lodash/reduce'), require('lodash/each'), require('mobx'), require('director'), require('react'), require('mobx-react')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'lodash/reduce', 'lodash/each', 'mobx', 'director', 'react', 'mobx-react'], factory) :
   (factory((global.mobxRouter = global.mobxRouter || {}),global.reduce,global.each,global.mobx,global.director,global.React,global.mobxReact));
 }(this, (function (exports,reduce,each,mobx,director,React,mobxReact) { 'use strict';
 

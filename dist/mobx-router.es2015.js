@@ -1,5 +1,5 @@
-import reduce from 'lodash/fp/reduce';
-import each from 'lodash/fp/each';
+import reduce from 'lodash/reduce';
+import each from 'lodash/each';
 import { computed, action, observable, toJS, autorun } from 'mobx';
 import { Router } from 'director';
 import React from 'react';
