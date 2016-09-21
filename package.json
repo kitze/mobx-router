@@ -2,15 +2,17 @@
   "name": "mobx-router",
   "version": "0.0.1",
   "description": "A simple router for MobX",
-  "main": "index.js",
+  "main": "dist/mobx-router.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/rollup-babel-lib-bundler/bin/index.js index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kitze/mobx-router.git"
   },
   "keywords": [
+    "kitze",
     "mobx",
     "router",
     "react"
@@ -22,10 +24,30 @@
   },
   "homepage": "https://github.com/kitze/mobx-router#readme",
   "dependencies": {
-    "lodash": "^4.16.1",
+    "lodash": "4.16.1",
+    "director": "1.2.8",
+    "react": "15.3.2",
+    "mobx": "2.5.1",
+    "mobx-react": "3.5.6"
+  },
+  "peerDependencies": {
+    "react": "15.x",
     "mobx": "^2.5.1",
-    "mobx-react": "^3.5.6",
-    "react": "^15.3.2",
-    "director": "^1.2.8"
-  }
+    "mobx-react": "^3.5.6"
+  },
+  "devDependencies": {
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-1": "^6.13.0",
+    "rollup-babel-lib-bundler": "^3.0.2"
+  },
+  "rollupBabelLibBundler": {
+    "moduleName": "mobxRouter",
+    "dest": "dist",
+    "babel": {
+      "presets": [
+        "stage-1",
+        "react"
+      ]
+    }
+  },
 }

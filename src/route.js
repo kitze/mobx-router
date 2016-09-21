@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import reduce from 'lodash/fp/reduce';
 import {mapAndFilter} from './utils';
 
 class Route {
@@ -15,7 +15,7 @@ class Route {
   beforeExit;
 
   constructor(props) {
-    _.each(props, (value, key) => this[key] = value);
+    props.forEach((value, key) => this[key] = value);
     this.rootPath = this.getRootPath();
   }
 
@@ -29,7 +29,7 @@ class Route {
    replaces url params placeholders with params from an object
    Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
    */
-  replaceUrlParams = params => _.reduce(params, (path, value, key) => path.replace(`:${key}`, value), this.path);
+  replaceUrlParams = params => reduce(params, (path, value, key) => path.replace(`:${key}`, value), this.path);
 
   /*
    converts an array of params [123, 100] to an object
@@ -39,7 +39,7 @@ class Route {
 
     let params = mapAndFilter(this.path.split('/'), p => p.indexOf(':') !== -1, p => p.substr(1, p.length - 1));
 
-    const result = _.reduce(paramsArray, (obj, paramValue, index) => {
+    const result = reduce(paramsArray, (obj, paramValue, index) => {
       obj[params[index]] = paramValue;
       return obj;
     }, {});
