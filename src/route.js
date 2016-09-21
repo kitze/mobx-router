@@ -1,5 +1,5 @@
-import reduce from 'lodash/fp/reduce';
-import each from 'lodash/fp/each';
+import reduce from 'lodash/reduce';
+import each from 'lodash/each';
 import {mapAndFilter} from './utils';
 
 class Route {

@@ -1,4 +1,4 @@
-import reduce from 'lodash/fp/reduce';
+import reduce from 'lodash/reduce';
 
 export const mapAndFilter = (array, condition, modification) => reduce(array, (results, member) => {
   condition(member) && results.push(modification(member))
