@@ -1,4 +1,5 @@
 import reduce from 'lodash/fp/reduce';
+import each from 'lodash/fp/each';
 import {mapAndFilter} from './utils';
 
 class Route {
@@ -15,7 +16,7 @@ class Route {
   beforeExit;
 
   constructor(props) {
-    props.forEach((value, key) => this[key] = value);
+    each(props, (value, key) => this[key] = value);
     this.rootPath = this.getRootPath();
   }
 
