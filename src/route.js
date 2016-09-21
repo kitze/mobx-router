@@ -1,4 +1,4 @@
-import {mapAndFilter} from './utils';
+import {mapAndFilter, getObjectKeys} from './utils';
 
 class Route {
 
@@ -14,7 +14,7 @@ class Route {
   beforeExit;
 
   constructor(props) {
-    Object.keys(props).forEach((propKey) => this[propKey] = props[propKey]);
+    getObjectKeys(props).forEach((propKey) => this[propKey] = props[propKey]);
     this.rootPath = this.getRootPath();
 
     //bind
@@ -37,7 +37,7 @@ class Route {
    Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
    */
   replaceUrlParams(params) {
-    return Object.keys(params).reduce((path, paramKey) => {
+    return getObjectKeys(params).reduce((path, paramKey) => {
       const value = params[paramKey];
       return path.replace(`:${paramKey}`, value);
     }, this.path);

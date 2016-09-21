@@ -1,6 +1,6 @@
 import {observable, computed, action, toJS} from 'mobx';
 
-class Router {
+class RouterStore {
 
   @observable params = {};
   @observable currentView;
@@ -36,4 +36,4 @@ class Router {
   }
 }
 
-export default Router;
+export default RouterStore;

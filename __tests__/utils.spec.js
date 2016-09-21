@@ -1,4 +1,4 @@
-import {mapAndFilter, viewsForDirector} from '../src/utils';
+import {mapAndFilter, viewsForDirector, isObject, getObjectKeys} from '../src/utils';
 import React from 'react';
 import Route from '../src/route';
 
@@ -44,4 +44,20 @@ test('viewsForDirector', () => {
     expect(typeof value).toEqual('function');
   });
 
+});
+
+test('isObject', () => {
+  expect(isObject({})).toBe(true);
+  expect(isObject([])).toBe(false);
+  expect(isObject(1)).toBe(false);
+  expect(isObject('string')).toBe(false);
+});
+
+test('getObjectKeys', () => {
+  expect(getObjectKeys({a: 1, b: 2})).toEqual(['a', 'b']);
+  expect(getObjectKeys(null)).toEqual([]);
+  expect(getObjectKeys(undefined)).toEqual([]);
+  expect(getObjectKeys([])).toEqual([]);
+  expect(getObjectKeys('str')).toEqual([]);
+  expect(getObjectKeys(123)).toEqual([]);
 });
