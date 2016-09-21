@@ -1,10 +1,11 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('lodash/fp/reduce'), require('mobx'), require('director'), require('react'), require('mobx-react')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'lodash/fp/reduce', 'mobx', 'director', 'react', 'mobx-react'], factory) :
-  (factory((global.mobxRouter = global.mobxRouter || {}),global.reduce,global.mobx,global.director,global.React,global.mobxReact));
-}(this, (function (exports,reduce,mobx,director,React,mobxReact) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('lodash/fp/reduce'), require('lodash/fp/each'), require('mobx'), require('director'), require('react'), require('mobx-react')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'lodash/fp/reduce', 'lodash/fp/each', 'mobx', 'director', 'react', 'mobx-react'], factory) :
+  (factory((global.mobxRouter = global.mobxRouter || {}),global.reduce,global.each,global.mobx,global.director,global.React,global.mobxReact));
+}(this, (function (exports,reduce,each,mobx,director,React,mobxReact) { 'use strict';
 
 reduce = 'default' in reduce ? reduce['default'] : reduce;
+each = 'default' in each ? each['default'] : each;
 React = 'default' in React ? React['default'] : React;
 
 const mapAndFilter = (array, condition, modification) => reduce(array, (results, member) => {
@@ -42,7 +43,7 @@ class Route {
       store.router.goTo(this, paramsObject, store);
     };
 
-    props.forEach((value, key) => this[key] = value);
+    each(props, (value, key) => this[key] = value);
     this.rootPath = this.getRootPath();
   }
 

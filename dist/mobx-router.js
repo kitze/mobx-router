@@ -5,6 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var reduce = _interopDefault(require('lodash/fp/reduce'));
+var each = _interopDefault(require('lodash/fp/each'));
 var mobx = require('mobx');
 var director = require('director');
 var React = _interopDefault(require('react'));
@@ -45,7 +46,7 @@ class Route {
       store.router.goTo(this, paramsObject, store);
     };
 
-    props.forEach((value, key) => this[key] = value);
+    each(props, (value, key) => this[key] = value);
     this.rootPath = this.getRootPath();
   }
 

@@ -1,4 +1,5 @@
 import reduce from 'lodash/fp/reduce';
+import each from 'lodash/fp/each';
 import { autorun, extendObservable, toJS, action } from 'mobx';
 import { Router } from 'director';
 import React from 'react';
@@ -39,7 +40,7 @@ class Route {
       store.router.goTo(this, paramsObject, store);
     };
 
-    props.forEach((value, key) => this[key] = value);
+    each(props, (value, key) => this[key] = value);
     this.rootPath = this.getRootPath();
   }
 
