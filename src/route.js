@@ -1,5 +1,3 @@
-import reduce from 'lodash/reduce';
-import each from 'lodash/each';
 import {mapAndFilter} from './utils';
 
 class Route {
@@ -16,7 +14,7 @@ class Route {
   beforeExit;
 
   constructor(props) {
-    each(props, (value, key) => this[key] = value);
+    Object.keys(props).forEach((propKey) => this[propKey] = props[propKey]);
     this.rootPath = this.getRootPath();
 
     //bind
@@ -39,7 +37,10 @@ class Route {
    Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
    */
   replaceUrlParams(params) {
-    return reduce(params, (path, value, key) => path.replace(`:${key}`, value), this.path);
+    return Object.keys(params).reduce((path, paramKey) => {
+      const value = params[paramKey];
+      return path.replace(`:${paramKey}`, value);
+    }, this.path);
   }
 
   /*
@@ -50,7 +51,7 @@ class Route {
 
     let params = mapAndFilter(this.path.split('/'), p => p.indexOf(':') !== -1, p => p.substr(1, p.length - 1));
 
-    const result = reduce(paramsArray, (obj, paramValue, index) => {
+    const result = paramsArray.reduce((obj, paramValue, index) => {
       obj[params[index]] = paramValue;
       return obj;
     }, {});
