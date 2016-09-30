@@ -120,18 +120,49 @@ var set = function set(object, property, value, receiver) {
   return value;
 };
 
+var slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
 var isObject = function isObject(obj) {
   return obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && !Array.isArray(obj);
 };
 var getObjectKeys = function getObjectKeys(obj) {
   return isObject(obj) ? Object.keys(obj) : [];
-};
-
-var mapAndFilter = function mapAndFilter(array, condition, modification) {
-  return array.reduce(function (results, member) {
-    condition(member) && results.push(modification(member));
-    return results;
-  }, []);
 };
 
 var viewsForDirector = function viewsForDirector(views, store) {
@@ -148,6 +179,16 @@ var viewsForDirector = function viewsForDirector(views, store) {
   }, {});
 };
 
+var getRegexMatches = function getRegexMatches(string, regexExpression, callback) {
+  var match = void 0;
+  while ((match = regexExpression.exec(string)) !== null) {
+    callback(match);
+  }
+};
+
+var paramRegex = /\/(:([^\/?]*)\??)/g;
+var optionalRegex = /(\/:[^\/]*\?)$/g;
+
 var Route = function () {
 
   //lifecycle methods
@@ -159,6 +200,10 @@ var Route = function () {
     getObjectKeys(props).forEach(function (propKey) {
       return _this[propKey] = props[propKey];
     });
+    this.originalPath = this.path;
+
+    //if there are optional parameters, replace the path with a regex expression
+    this.path = this.path.indexOf('?') === -1 ? this.path : this.path.replace(optionalRegex, "/?([^/]*)?$");
     this.rootPath = this.getRootPath();
 
     //bind
@@ -191,10 +236,20 @@ var Route = function () {
      Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
      */
     value: function replaceUrlParams(params) {
-      return getObjectKeys(params).reduce(function (path, paramKey) {
-        var value = params[paramKey];
-        return path.replace(':' + paramKey, value);
-      }, this.path);
+      var newPath = this.originalPath;
+
+      getRegexMatches(this.originalPath, paramRegex, function (_ref) {
+        var _ref2 = slicedToArray(_ref, 3);
+
+        var fullMatch = _ref2[0];
+        var paramKey = _ref2[1];
+        var paramKeyWithoutColon = _ref2[2];
+
+        var value = params[paramKeyWithoutColon];
+        newPath = value ? newPath.replace(paramKey, value) : newPath.replace('/' + paramKey, '');
+      });
+
+      return newPath;
     }
 
     /*
@@ -206,10 +261,15 @@ var Route = function () {
     key: 'getParamsObject',
     value: function getParamsObject(paramsArray) {
 
-      var params = mapAndFilter(this.path.split('/'), function (p) {
-        return p.indexOf(':') !== -1;
-      }, function (p) {
-        return p.substr(1, p.length - 1);
+      var params = [];
+      getRegexMatches(this.originalPath, paramRegex, function (_ref3) {
+        var _ref4 = slicedToArray(_ref3, 3);
+
+        var fullMatch = _ref4[0];
+        var paramKey = _ref4[1];
+        var paramKeyWithoutColon = _ref4[2];
+
+        params.push(paramKeyWithoutColon);
       });
 
       var result = paramsArray.reduce(function (obj, paramValue, index) {
