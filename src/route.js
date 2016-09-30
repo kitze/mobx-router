@@ -1,4 +1,6 @@
-import {mapAndFilter, getObjectKeys} from './utils';
+import {getObjectKeys} from './utils';
+import {paramRegex, optionalRegex} from './regex';
+import {getRegexMatches} from './utils';
 
 class Route {
 
@@ -15,6 +17,10 @@ class Route {
 
   constructor(props) {
     getObjectKeys(props).forEach((propKey) => this[propKey] = props[propKey]);
+    this.originalPath = this.path;
+
+    //if there are optional parameters, replace the path with a regex expression
+    this.path = this.path.indexOf('?') === -1 ? this.path : this.path.replace(optionalRegex, "/?([^/]*)?$");
     this.rootPath = this.getRootPath();
 
     //bind
@@ -37,10 +43,14 @@ class Route {
    Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
    */
   replaceUrlParams(params) {
-    return getObjectKeys(params).reduce((path, paramKey) => {
-      const value = params[paramKey];
-      return path.replace(`:${paramKey}`, value);
-    }, this.path);
+    let newPath = this.originalPath;
+
+    getRegexMatches(this.originalPath, paramRegex, ([fullMatch, paramKey, paramKeyWithoutColon]) => {
+      const value = params[paramKeyWithoutColon];
+      newPath = value ? newPath.replace(paramKey, value) : newPath.replace(`/${paramKey}`, '');
+    });
+
+    return newPath;
   }
 
   /*
@@ -49,7 +59,10 @@ class Route {
    */
   getParamsObject(paramsArray) {
 
-    let params = mapAndFilter(this.path.split('/'), p => p.indexOf(':') !== -1, p => p.substr(1, p.length - 1));
+    const params = [];
+    getRegexMatches(this.originalPath, paramRegex, ([fullMatch, paramKey, paramKeyWithoutColon]) => {
+      params.push(paramKeyWithoutColon);
+    });
 
     const result = paramsArray.reduce((obj, paramValue, index) => {
       obj[params[index]] = paramValue;

@@ -1,23 +1,8 @@
-import {mapAndFilter, viewsForDirector, isObject, getObjectKeys} from '../src/utils';
+import {viewsForDirector, isObject, getObjectKeys, getRegexMatches} from '../src/utils';
+import {paramRegex} from '../src/regex';
+
 import React from 'react';
 import Route from '../src/route';
-
-test('mapAndFilter', () => {
-  const users = [
-    {
-      name: 'Kitze',
-      age: 17
-    },
-    {
-      name: 'Sherlock',
-      age: 20
-    }
-  ];
-
-  const result = mapAndFilter(users, u => u.age > 18, u => `${u.name} can drink`);
-  expect(result.length).toBe(1);
-  expect(result[0]).toBe('Sherlock can drink');
-});
 
 test('viewsForDirector', () => {
   const views = {
@@ -60,4 +45,38 @@ test('getObjectKeys', () => {
   expect(getObjectKeys([])).toEqual([]);
   expect(getObjectKeys('str')).toEqual([]);
   expect(getObjectKeys(123)).toEqual([]);
+});
+
+test('getRegexMatches', () => {
+  const paramsArray = [];
+  const path = '/profile/user/:username/:tab?';
+
+  getRegexMatches(path, paramRegex, match => {
+    paramsArray.push(match[2]);
+  });
+
+  const paramsArray2 = [];
+  const path2 = '/profile';
+
+  getRegexMatches(path2, paramRegex, match => {
+    paramsArray2.push(match[2]);
+  });
+
+  const paramsArray3 = [];
+  const path3 = '/profile/:username';
+
+  getRegexMatches(path3, paramRegex, ([,,third]) => {
+    paramsArray3.push(third);
+  });
+
+  const paramsArray4 = [];
+
+  getRegexMatches(path, paramRegex, ([,second]) => {
+    paramsArray4.push(second);
+  });
+
+  expect(paramsArray).toEqual(['username', 'tab']);
+  expect(paramsArray2).toEqual([]);
+  expect(paramsArray3).toEqual(['username']);
+  expect(paramsArray4).toEqual([':username', ':tab?']);
 });
