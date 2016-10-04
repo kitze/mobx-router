@@ -15,7 +15,7 @@ v0.0.1 🎉 - by [@thekitze](https://kitze.io)
 - ```<Link>``` component which also populates the href attribute and works with middle click or ```cmd/ctrl``` + click
 
 ###Example usage
-[Demo project](http://mobx-router-example.surge.sh/)
+[Demo project](http://mobx-router-example.surge.sh/)  
 [Demo project repo](https://github.com/kitze/mobx-router-example)
 
 ### Implementation
