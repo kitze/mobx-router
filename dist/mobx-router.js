@@ -355,26 +355,26 @@ var RouterStore = (_class = function () {
 
       var rootViewChanged = !this.currentView || this.currentView.rootPath !== view.rootPath;
 
-      var beforeExitResult = rootViewChanged && this.currentView && this.currentView.beforeExit ? this.currentView.beforeExit(this.currentView, this.params, store) : true;
+      var currentParams = mobx.toJS(this.params);
+
+      var beforeExitResult = rootViewChanged && this.currentView && this.currentView.beforeExit ? this.currentView.beforeExit(this.currentView, currentParams, store) : true;
       if (beforeExitResult === false) {
         return;
       }
 
-      var beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, this.params, store) : true;
+      var beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, currentParams, store) : true;
       if (beforeEnterResult === false) {
         return;
       }
 
-      if (rootViewChanged) {
-        this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, this.params, store);
-      } else {
-        this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, this.params, store);
-      }
+      rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, currentParams, store);
 
       this.currentView = view;
+      var nextParams = mobx.toJS(paramsObj);
       this.params = mobx.toJS(paramsObj);
 
-      rootViewChanged && view.onEnter && view.onEnter(view, this.params, store);
+      rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store);
+      !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store);
     }
   }, {
     key: 'currentPath',
