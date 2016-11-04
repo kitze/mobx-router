@@ -1,5 +1,8 @@
 # 〽️ MobX Router
-v0.0.1 🎉 - by [@thekitze](https://twitter.com/kitze)
+v0.0.1 🎉 - by [@thekitze](http://kitze.io)
+
+## Inspiration
+[📖 How to decouple state and UI - a.k.a. you don’t need componentWillMount](https://medium.com/@mweststrate/how-to-decouple-state-and-ui-a-k-a-you-dont-need-componentwillmount-cc90b787aa37#.k9tvf5nga)
 
 ##Features
 - Decoupled state from UI
@@ -12,7 +15,7 @@ v0.0.1 🎉 - by [@thekitze](https://twitter.com/kitze)
 - ```<Link>``` component which also populates the href attribute and works with middle click or ```cmd/ctrl``` + click
 
 ###Example usage
-[Demo project](http://mobx-router-example.surge.sh/)
+[Demo project](http://mobx-router-example.surge.sh/)  
 [Demo project repo](https://github.com/kitze/mobx-router-example)
 
 ### Implementation
