@@ -1,5 +1,5 @@
 # 〽️ MobX Router
-v0.0.1 🎉 - by [@thekitze](http://kitze.io)
+v0.0.4 🎉 - by [@thekitze](http://kitze.io)
 
 ## Inspiration
 [📖 How to decouple state and UI - a.k.a. you don’t need componentWillMount](https://medium.com/@mweststrate/how-to-decouple-state-and-ui-a-k-a-you-dont-need-componentwillmount-cc90b787aa37#.k9tvf5nga)
