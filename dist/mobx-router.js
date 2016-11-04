@@ -365,7 +365,11 @@ var RouterStore = (_class = function () {
         return;
       }
 
-      rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, this.params, store);
+      if (rootViewChanged) {
+        this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, this.params, store);
+      } else {
+        this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, this.params, store);
+      }
 
       this.currentView = view;
       this.params = mobx.toJS(paramsObj);
