@@ -1,8 +1,9 @@
 {
   "name": "mobx-router",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple router for MobX",
   "main": "dist/mobx-router.js",
+  "jsnext:main":"dist/mobx-router.es2015.js",
   "scripts": {
     "test": "jest",
     "build": "./node_modules/rollup-babel-lib-bundler/bin/index.js index.js"

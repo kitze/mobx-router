@@ -73,6 +73,9 @@ const views = {
     },
     beforeExit: () => {
       console.log('exiting user profile!');
+    },
+    onParamsChange: (route, params, store) => {
+      console.log('params changed to', params);
     }
   }),
   gallery: new Route({
