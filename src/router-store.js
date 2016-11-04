@@ -13,27 +13,26 @@ class RouterStore {
 
     const rootViewChanged = !this.currentView || (this.currentView.rootPath !== view.rootPath);
 
-    const beforeExitResult = (rootViewChanged && this.currentView && this.currentView.beforeExit) ? this.currentView.beforeExit(this.currentView, this.params, store) : true;
+    const currentParams = toJS(this.params);
+
+    const beforeExitResult = (rootViewChanged && this.currentView && this.currentView.beforeExit) ? this.currentView.beforeExit(this.currentView, currentParams, store) : true;
     if (beforeExitResult === false) {
       return;
     }
 
-    const beforeEnterResult = (rootViewChanged && view.beforeEnter) ? view.beforeEnter(view, this.params, store) : true
+    const beforeEnterResult = (rootViewChanged && view.beforeEnter) ? view.beforeEnter(view, currentParams, store) : true
     if (beforeEnterResult === false) {
       return;
     }
 
-    if (rootViewChanged) {
-      this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, this.params, store);
-    }
-    else {
-      this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, this.params, store);
-    }
+    rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, currentParams, store);
 
     this.currentView = view;
+    const nextParams = toJS(paramsObj);
     this.params = toJS(paramsObj);
 
-    rootViewChanged && view.onEnter && view.onEnter(view, this.params, store);
+    rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store);
+    !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store);
   }
 
   @computed get currentPath() {
