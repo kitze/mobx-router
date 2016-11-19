@@ -25,8 +25,8 @@ const routes = {
     onExit: (route, params) => {
       mocks.exitingProfile(params);
     },
-    onParamsChange: (route, params) => {
-      mocks.changingParamsProfile(params);
+    onParamsChange: (route, params, store, queryParams) => {
+      mocks.changingParamsProfile(params, queryParams);
     }
   })
 };
