@@ -29,6 +29,7 @@
     "director": "1.2.8",
     "mobx": "2.5.1",
     "mobx-react": "3.5.6",
+    "query-string": "^4.2.3",
     "react": "15.3.2"
   },
   "peerDependencies": {

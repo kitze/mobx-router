@@ -1,6 +1,8 @@
+import {toJS} from 'mobx';
 import {getObjectKeys} from './utils';
 import {paramRegex, optionalRegex} from './regex';
 import {getRegexMatches} from './utils';
+import queryString from 'query-string';
 
 class Route {
 
@@ -42,7 +44,12 @@ class Route {
    replaces url params placeholders with params from an object
    Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
    */
-  replaceUrlParams(params) {
+  replaceUrlParams(params, queryParams = {}) {
+    params = toJS(params);
+    queryParams = toJS(queryParams);
+
+    const queryParamsString = queryString.stringify(queryParams).toString();
+    const hasQueryParams = queryParamsString !== '';
     let newPath = this.originalPath;
 
     getRegexMatches(this.originalPath, paramRegex, ([fullMatch, paramKey, paramKeyWithoutColon]) => {
@@ -50,7 +57,7 @@ class Route {
       newPath = value ? newPath.replace(paramKey, value) : newPath.replace(`/${paramKey}`, '');
     });
 
-    return newPath;
+    return `${newPath}${hasQueryParams ? `?${queryParamsString}` : ''}`.toString();
   }
 
   /*
@@ -74,7 +81,8 @@ class Route {
 
   goTo(store, paramsArr) {
     const paramsObject = this.getParamsObject(paramsArr);
-    store.router.goTo(this, paramsObject, store);
+    const queryParamsObject = queryString.parse(window.location.search);
+    store.router.goTo(this, paramsObject, store, queryParamsObject);
   }
 }
 
