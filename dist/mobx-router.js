@@ -5,6 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var mobx = require('mobx');
+var queryString = _interopDefault(require('query-string'));
 var director = require('director');
 var React = _interopDefault(require('react'));
 var mobxReact = require('mobx-react');
@@ -242,6 +243,13 @@ var Route = function () {
      Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
      */
     value: function replaceUrlParams(params) {
+      var queryParams = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+      params = mobx.toJS(params);
+      queryParams = mobx.toJS(queryParams);
+
+      var queryParamsString = queryString.stringify(queryParams).toString();
+      var hasQueryParams = queryParamsString !== '';
       var newPath = this.originalPath;
 
       getRegexMatches(this.originalPath, paramRegex, function (_ref) {
@@ -255,7 +263,7 @@ var Route = function () {
         newPath = value ? newPath.replace(paramKey, value) : newPath.replace('/' + paramKey, '');
       });
 
-      return newPath;
+      return ('' + newPath + (hasQueryParams ? '?' + queryParamsString : '')).toString();
     }
 
     /*
@@ -289,7 +297,8 @@ var Route = function () {
     key: 'goTo',
     value: function goTo(store, paramsArr) {
       var paramsObject = this.getParamsObject(paramsArr);
-      store.router.goTo(this, paramsObject, store);
+      var queryParamsObject = queryString.parse(window.location.search);
+      store.router.goTo(this, paramsObject, store, queryParamsObject);
     }
   }]);
   return Route;
@@ -298,6 +307,7 @@ var Route = function () {
 var _class;
 var _descriptor;
 var _descriptor2;
+var _descriptor3;
 
 function _initDefineProp(target, property, descriptor, context) {
   if (!descriptor) return;
@@ -344,42 +354,53 @@ var RouterStore = (_class = function () {
 
     _initDefineProp(this, 'params', _descriptor, this);
 
-    _initDefineProp(this, 'currentView', _descriptor2, this);
+    _initDefineProp(this, 'queryParams', _descriptor2, this);
+
+    _initDefineProp(this, 'currentView', _descriptor3, this);
 
     this.goTo = this.goTo.bind(this);
   }
 
   createClass(RouterStore, [{
     key: 'goTo',
-    value: function goTo(view, paramsObj, store) {
+    value: function goTo(view, paramsObj, store, queryParamsObj) {
+
+      var nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
+      var pathChanged = nextPath !== this.currentPath;
+
+      if (!pathChanged) {
+        return;
+      }
 
       var rootViewChanged = !this.currentView || this.currentView.rootPath !== view.rootPath;
-
       var currentParams = mobx.toJS(this.params);
+      var currentQueryParams = mobx.toJS(this.queryParams);
 
-      var beforeExitResult = rootViewChanged && this.currentView && this.currentView.beforeExit ? this.currentView.beforeExit(this.currentView, currentParams, store) : true;
+      var beforeExitResult = rootViewChanged && this.currentView && this.currentView.beforeExit ? this.currentView.beforeExit(this.currentView, currentParams, store, currentQueryParams) : true;
       if (beforeExitResult === false) {
         return;
       }
 
-      var beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, currentParams, store) : true;
+      var beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, currentParams, store, currentQueryParams) : true;
       if (beforeEnterResult === false) {
         return;
       }
 
-      rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, currentParams, store);
+      rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, currentParams, store, currentQueryParams);
 
       this.currentView = view;
-      var nextParams = mobx.toJS(paramsObj);
       this.params = mobx.toJS(paramsObj);
+      this.queryParams = mobx.toJS(queryParamsObj);
+      var nextParams = mobx.toJS(paramsObj);
+      var nextQueryParams = mobx.toJS(queryParamsObj);
 
-      rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store);
-      !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store);
+      rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
+      !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store, nextQueryParams);
     }
   }, {
     key: 'currentPath',
     get: function get() {
-      return this.currentView ? this.currentView.replaceUrlParams(this.params) : '';
+      return this.currentView ? this.currentView.replaceUrlParams(this.params, this.queryParams) : '';
     }
   }]);
   return RouterStore;
@@ -388,7 +409,12 @@ var RouterStore = (_class = function () {
   initializer: function initializer() {
     return {};
   }
-}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'currentView', [mobx.observable], {
+}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'queryParams', [mobx.observable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return {};
+  }
+}), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'currentView', [mobx.observable], {
   enumerable: true,
   initializer: null
 }), _applyDecoratedDescriptor(_class.prototype, 'goTo', [mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
@@ -427,6 +453,8 @@ var Link = function Link(_ref) {
   var view = _ref.view;
   var _ref$params = _ref.params;
   var params = _ref$params === undefined ? {} : _ref$params;
+  var _ref$queryParams = _ref.queryParams;
+  var queryParams = _ref$queryParams === undefined ? {} : _ref$queryParams;
   var _ref$store = _ref.store;
   var store = _ref$store === undefined ? {} : _ref$store;
   var _ref$removeStyle = _ref.removeStyle;
@@ -456,10 +484,10 @@ var Link = function Link(_ref) {
 
         if (!shouldNavigateManually) {
           e.preventDefault();
-          router.goTo(view, params, store);
+          router.goTo(view, params, store, queryParams);
         }
       },
-      href: view.replaceUrlParams(params) },
+      href: view.replaceUrlParams(params, queryParams) },
     title
   );
 };
