@@ -1,5 +1,9 @@
 # 〽️ MobX Router
-v0.0.4 🎉 - by [@thekitze](http://kitze.io)
+v0.0.5 🎉 - by [@thekitze](http://kitze.io)
+
+###Example usage
+[Demo project](http://mobx-router-example.netlify.com/)
+[Demo project repo](https://github.com/kitze/mobx-router-example)
 
 ## Inspiration
 [📖 How to decouple state and UI - a.k.a. you don’t need componentWillMount](https://medium.com/@mweststrate/how-to-decouple-state-and-ui-a-k-a-you-dont-need-componentwillmount-cc90b787aa37#.k9tvf5nga)
@@ -9,14 +13,10 @@ v0.0.4 🎉 - by [@thekitze](http://kitze.io)
 - Central route configuration in one file
 - URL changes are triggering changes directly in the store, and vice-versa
 - No need to use component lifecycle methods like ```componentWillMount``` to fetch data or trigger a side effect in the store
-- Supported hooks for the routes are: ```beforeEnter```, ```onEnter```, ```beforeExit```, ```onExit```. All of the hooks receive ```route```, ```params```, and ```store``` as parameters. If the ```beforeExit``` or ```beforeEnter``` methods return ```false``` the navigation action will be prevented.
-- The current URL params are accessible directly in the store ```store.router.params``` so basically they're available everywhere without any additional wrapping or HOC.
+- Supported hooks for the routes are: ```beforeEnter```, ```onEnter```, ```beforeExit```, ```onExit```. All of the hooks receive ```route```, ```params```, ```store```, and ```queryParams``` as parameters. If the ```beforeExit``` or ```beforeEnter``` methods return ```false``` the navigation action will be prevented.
+- The current URL params and query params are accessible directly in the store ```store.router.params``` / ```store.router.queryParams``` so basically they're available everywhere without any additional wrapping or HOC.
 - Navigating to another view happens by calling the ```goTo``` method on the router store, and the changes in the url are reflected automatically. So for example you can call ```router.goTo(views.book, {id:5, page:3})``` and after the change is made in the store, the URL change will follow. You never directly manipulate the URL or the history object.
 - ```<Link>``` component which also populates the href attribute and works with middle click or ```cmd/ctrl``` + click
-
-###Example usage
-[Demo project](http://mobx-router-example.surge.sh/)  
-[Demo project repo](https://github.com/kitze/mobx-router-example)
 
 ### Implementation
 ```js
@@ -84,8 +84,9 @@ const views = {
   gallery: new Route({
     path: '/gallery',
     component: <Gallery/>,
-    onEnter: (route, params, store) => {
+    onEnter: (route, params, store, queryParams) => {
     	store.gallery.fetchImages();
+    	console.log('current query params are -> ', queryParams);
     },
     beforeExit: () => {
       const result = confirm('Are you sure you want to leave the gallery?');
