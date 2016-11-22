@@ -445,14 +445,13 @@ var MobxRouter$1 = observer(['store'], MobxRouter);
 
 var Link = function Link(_ref) {
   var view = _ref.view;
+  var className = _ref.className;
   var _ref$params = _ref.params;
   var params = _ref$params === undefined ? {} : _ref$params;
   var _ref$queryParams = _ref.queryParams;
   var queryParams = _ref$queryParams === undefined ? {} : _ref$queryParams;
   var _ref$store = _ref.store;
   var store = _ref$store === undefined ? {} : _ref$store;
-  var _ref$removeStyle = _ref.removeStyle;
-  var removeStyle = _ref$removeStyle === undefined ? false : _ref$removeStyle;
   var _ref$refresh = _ref.refresh;
   var refresh = _ref$refresh === undefined ? false : _ref$refresh;
   var _ref$style = _ref.style;
@@ -469,7 +468,8 @@ var Link = function Link(_ref) {
   return React.createElement(
     'a',
     {
-      style: _extends({}, removeStyle && _extends({ textDecoration: 'none', color: 'black' }, style)),
+      style: style,
+      className: className,
       onClick: function onClick(e) {
         var middleClick = e.which == 2;
         var cmdOrCtrl = e.metaKey || e.ctrlKey;

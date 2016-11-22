@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {observer} from 'mobx-react';
 
-const Link = ({view, params = {}, queryParams={}, store = {}, removeStyle = false, refresh = false, style = {}, children, title = children, router = store.router}) => {
+const Link = ({view, className, params = {}, queryParams = {}, store = {}, refresh = false, style = {}, children, title = children, router = store.router}) => {
   if (!router) {
     return console.error('The router prop must be defined for a Link component to work!')
   }
   return (<a
-      style={{...removeStyle && {textDecoration: 'none', color: 'black', ...style}}}
+      style={style}
+      className={className}
       onClick={e => {
         const middleClick = e.which == 2;
         const cmdOrCtrl = (e.metaKey || e.ctrlKey);

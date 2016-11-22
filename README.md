@@ -1,5 +1,5 @@
 # 〽️ MobX Router
-v0.0.5 🎉 - by [@thekitze](http://kitze.io)
+v0.0.6 🎉 - by [@thekitze](http://kitze.io)
 
 ###Example usage
 [Demo project](http://mobx-router-example.netlify.com/)
