@@ -20,14 +20,14 @@ test('Router Scenario', () => {
 
   expect(router.currentPath).toBe('/profile/kristijan');
   expect(mocks.enteringProfile).toHaveBeenCalledTimes(1);
-  expect(mocks.changingParamsProfile).lastCalledWith({username: 'kristijan'});
+  expect(mocks.changingParamsProfile).lastCalledWith({username: 'kristijan'}, undefined);
   expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(1);
 
   router.goTo(routes.profile, {username: 'kristijan', tab: 'about'});
 
   expect(router.currentPath).toBe('/profile/kristijan/about');
   expect(mocks.enteringProfile).toHaveBeenCalledTimes(1);
-  expect(mocks.changingParamsProfile).lastCalledWith({tab: 'about', username: 'kristijan'});
+  expect(mocks.changingParamsProfile).lastCalledWith({tab: 'about', username: 'kristijan'}, undefined);
   expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(2);
 
   router.goTo(routes.home);
