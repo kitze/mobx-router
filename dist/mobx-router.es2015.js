@@ -1,6 +1,6 @@
 import { action, autorun, computed, observable, toJS } from 'mobx';
 import queryString from 'query-string';
-import { Router } from 'director';
+import { Router } from 'director/build/director';
 import React from 'react';
 import { observer } from 'mobx-react';
 

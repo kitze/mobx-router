@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('mobx'), require('query-string'), require('director'), require('react'), require('mobx-react')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'mobx', 'query-string', 'director', 'react', 'mobx-react'], factory) :
-  (factory((global.mobxRouter = global.mobxRouter || {}),global.mobx,global.queryString,global.director,global.React,global.mobxReact));
-}(this, (function (exports,mobx,queryString,director,React,mobxReact) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('mobx'), require('query-string'), require('director/build/director'), require('react'), require('mobx-react')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'mobx', 'query-string', 'director/build/director', 'react', 'mobx-react'], factory) :
+  (factory((global.mobxRouter = global.mobxRouter || {}),global.mobx,global.queryString,global.director_build_director,global.React,global.mobxReact));
+}(this, (function (exports,mobx,queryString,director_build_director,React,mobxReact) { 'use strict';
 
 queryString = 'default' in queryString ? queryString['default'] : queryString;
 React = 'default' in React ? React['default'] : React;
@@ -417,7 +417,7 @@ var RouterStore = (_class = function () {
 }), _applyDecoratedDescriptor(_class.prototype, 'goTo', [mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
 
 var createDirectorRouter = function createDirectorRouter(views, store) {
-  new director.Router(_extends({}, viewsForDirector(views, store))).configure({
+  new director_build_director.Router(_extends({}, viewsForDirector(views, store))).configure({
     html5history: true
   }).init();
 };

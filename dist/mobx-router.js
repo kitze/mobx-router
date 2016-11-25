@@ -6,7 +6,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var mobx = require('mobx');
 var queryString = _interopDefault(require('query-string'));
-var director = require('director');
+var director_build_director = require('director/build/director');
 var React = _interopDefault(require('react'));
 var mobxReact = require('mobx-react');
 
@@ -420,7 +420,7 @@ var RouterStore = (_class = function () {
 }), _applyDecoratedDescriptor(_class.prototype, 'goTo', [mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
 
 var createDirectorRouter = function createDirectorRouter(views, store) {
-  new director.Router(_extends({}, viewsForDirector(views, store))).configure({
+  new director_build_director.Router(_extends({}, viewsForDirector(views, store))).configure({
     html5history: true
   }).init();
 };
