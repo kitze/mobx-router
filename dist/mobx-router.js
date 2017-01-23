@@ -380,6 +380,13 @@ function _applyDecoratedDescriptor(target, property, decorators, descriptor, con
 }
 
 var RouterStore = (_class = function () {
+  createClass(RouterStore, [{
+    key: 'currentPath',
+    get: function get() {
+      return this.currentView ? this.currentView.replaceUrlParams(this.params, this.queryParams) : '';
+    }
+  }]);
+
   function RouterStore() {
     classCallCheck(this, RouterStore);
 
@@ -490,11 +497,6 @@ var RouterStore = (_class = function () {
 
       return goTo;
     }()
-  }, {
-    key: 'currentPath',
-    get: function get() {
-      return this.currentView ? this.currentView.replaceUrlParams(this.params, this.queryParams) : '';
-    }
   }]);
   return RouterStore;
 }(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'params', [mobx.observable], {
@@ -510,7 +512,7 @@ var RouterStore = (_class = function () {
 }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'currentView', [mobx.observable], {
   enumerable: true,
   initializer: null
-}), _applyDecoratedDescriptor(_class.prototype, 'goTo', [mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
+}), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'goTo', [mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype)), _class);
 
 var createDirectorRouter = function createDirectorRouter(views, store) {
   new director_build_director.Router(_extends({}, viewsForDirector(views, store))).configure({

@@ -6,6 +6,10 @@ class RouterStore {
   @observable queryParams = {};
   @observable currentView;
 
+  @computed get currentPath() {
+    return this.currentView ? this.currentView.replaceUrlParams(this.params, this.queryParams) : '';
+  }
+
   constructor() {
     this.goTo = this.goTo.bind(this);
   }
@@ -55,10 +59,6 @@ class RouterStore {
 
     rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
     !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store, nextQueryParams);
-  }
-
-  @computed get currentPath() {
-    return this.currentView ? this.currentView.replaceUrlParams(this.params, this.queryParams) : '';
   }
 }
 

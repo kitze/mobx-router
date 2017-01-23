@@ -2,7 +2,7 @@
   "name": "mobx-router",
   "version": "0.0.7",
   "description": "A simple router for MobX",
-  "main": "index.js",
+  "main": "dist/mobx-router.js",
   "jsnext:main": "dist/mobx-router.es2015.js",
   "scripts": {
     "test": "jest",
