@@ -24,7 +24,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'mobx-react';
 
-import {MobxRouter, routerStore, startRouter} from 'mobx-router';
+import {MobxRouter, RouterStore, startRouter} from 'mobx-router';
 import views from 'config/views';
 
 //example mobx store
@@ -34,7 +34,7 @@ const store = {
 		user: null
 	},
 	//here's how we can plug the routerStore into our store
-	router: routerStore
+	router: new RouterStore()
 };
 
 startRouter(views, store);
