@@ -28,13 +28,23 @@ class RouterStore {
       return;
     }
 
-    const beforeEnterResult = (rootViewChanged && view.beforeEnter) ? view.beforeEnter(view, currentParams, store, currentQueryParams) : true
-    if (beforeEnterResult === false) {
-      return;
+    let beforeEnterResult;
+    if (rootViewChanged && view.beforeEnter) {
+      beforeEnterResult = view.beforeEnter(view, paramsObj, store, currentQueryParams);
+      if (typeof beforeEnterResult.then === 'function') {
+        return beforeEnterResult
+          .then(() => this.changeView(rootViewChanged, currentParams, queryParamsObj, paramsObj, store, currentQueryParams, view));
+      }
     }
 
-    rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, currentParams, store, currentQueryParams);
+    if (beforeEnterResult === false) {
+        return;
+      }
+    this.changeView(rootViewChanged, currentParams, queryParamsObj, paramsObj, store, currentQueryParams, view);
+  }
 
+  @action changeView(rootViewChanged, currentParams, queryParamsObj, paramsObj, store, currentQueryParams, view) {
+    rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, currentParams, store, currentQueryParams);
     this.currentView = view;
     this.params = toJS(paramsObj);
     this.queryParams = toJS(queryParamsObj);

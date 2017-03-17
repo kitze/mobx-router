@@ -5,7 +5,7 @@ test('Route', () => {
 
   const route = new Route({
     path: '/profile/:username/:tab',
-    component: <div/>,
+    component: <div/>
   });
 
   const replacedUrlParams = route.replaceUrlParams({username: 'kitze', tab: 'profile'});

@@ -28,6 +28,16 @@ const routes = {
     onParamsChange: (route, params, store, queryParams) => {
       mocks.changingParamsProfile(params, queryParams);
     }
+  }),
+  asyncRoute: new Route({
+    path: '/async',
+    component: <div/>,
+    beforeEnter: async () => await Promise.resolve()
+  }),
+  asyncRouteFailed: new Route({
+    path: '/asyncFailed',
+    component: <div/>,
+    beforeEnter: async () => await Promise.reject()
   })
 };
 

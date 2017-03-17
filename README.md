@@ -62,6 +62,7 @@ import Document from 'components/Document';
 import Gallery from 'components/Gallery';
 import Book from 'components/Book';
 import UserProfile from 'components/UserProfile';
+import Async from 'components/AsyncComponent';
 
 const views = {
   home: new Route({
@@ -114,6 +115,22 @@ const views = {
       console.log(`entering book with params`, params);
       store.app.setTitle(route.title);
     }
+  }),
+  asyncRoute: new Route({
+    path: '/asycn/:id',
+    component: <Async />,
+    beforeEnter: async (route, params, store) => {
+      store.ui.showSpinner = true;
+
+      try {
+        await fetchEntity(params.id);
+        store.ui.showError = false;
+      } catch (e) {
+        store.ui.showError = true;
+      }
+
+      store.ui.showSpinner = false;
+    },
   })
 };
 export default views;

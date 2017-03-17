@@ -39,5 +39,23 @@ test('Router Scenario', () => {
   expect(mocks.enteringHome).lastCalledWith();
   expect(mocks.changingParamsHome).not.toBeCalled();
   expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(2);
-
 });
+
+test('Async router', async () => {
+  const router = new RouterStore();
+  router.currentView = routes.home;
+
+  await router.goTo(routes.asyncRoute);
+  expect(router.currentPath).toBe(routes.asyncRoute.path);
+})
+
+test('Async router reject', async () => {
+  const router = new RouterStore();
+  router.currentView = routes.home;
+
+  try {
+    await router.goTo(routes.asyncRouteFailed);
+  } catch (e) {
+    expect(router.currentPath).toBe(routes.home.path);
+  }
+})
