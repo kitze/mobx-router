@@ -22,7 +22,7 @@ class Route {
     this.originalPath = this.path;
 
     //if there are optional parameters, replace the path with a regex expression
-    this.path = this.path.indexOf('?') === -1 ? this.path : this.path.replace(optionalRegex, "/?([^/]*)?$");
+    this.path = this.path.indexOf('?') === -1 ? this.path : this.path.replace(optionalRegex, "(/([^/]*)?)?$");
     this.rootPath = this.getRootPath();
 
     //bind
