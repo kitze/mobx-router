@@ -1,14 +1,14 @@
 # 〽️ MobX Router
 v0.0.6 🎉 - by [@thekitze](http://kitze.io)
 
-###Example usage
-[Demo project](http://mobx-router-example.netlify.com/)
-[Demo project repo](https://github.com/kitze/mobx-router-example)
+### Example usage
+* [Demo project](http://mobx-router-example.netlify.com/)
+* [Demo project repo](https://github.com/kitze/mobx-router-example)
 
 ## Inspiration
 [📖 How to decouple state and UI - a.k.a. you don’t need componentWillMount](https://medium.com/@mweststrate/how-to-decouple-state-and-ui-a-k-a-you-dont-need-componentwillmount-cc90b787aa37#.k9tvf5nga)
 
-##Features
+## Features
 - Decoupled state from UI
 - Central route configuration in one file
 - URL changes are triggering changes directly in the store, and vice-versa
@@ -46,7 +46,7 @@ ReactDOM.render(
 )
 ```
 
-###Example config
+### Example config
 
 /config/views.js
 
