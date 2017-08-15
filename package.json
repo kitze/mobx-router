@@ -3,7 +3,7 @@
   "version": "0.0.7",
   "description": "A simple router for MobX",
   "main": "dist/mobx-router.js",
-  "jsnext:main":"dist/mobx-router.es2015.js",
+  "jsnext:main": "dist/mobx-router.es2015.js",
   "scripts": {
     "test": "jest",
     "build": "./node_modules/rollup-babel-lib-bundler/bin/index.js index.js"
@@ -47,6 +47,7 @@
     "babel-preset-es2015-rollup": "^1.2.0",
     "babel-preset-react": "6.11.1",
     "babel-preset-stage-0": "^6.5.0",
+    "babel-runtime": "^6.22.0",
     "jest-cli": "^15.1.1",
     "rollup-babel-lib-bundler": "3.1.0"
   },

@@ -2,7 +2,10 @@ import RouterStore from '../src/router-store';
 import routes from './mocks/routes';
 import mocks from './mocks/mocks';
 
-test('Router Scenario', () => {
+// Still test async functionality but don't make us actually wait
+jest.useFakeTimers();
+
+test('Router Scenario', async () => {
 
   const router = new RouterStore();
   router.currentView = routes.home;
@@ -40,4 +43,15 @@ test('Router Scenario', () => {
   expect(mocks.changingParamsHome).not.toBeCalled();
   expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(2);
 
+  await router.goTo(routes.asyncProfile);
+
+  expect(router.currentPath).toBe('/async-profile');
+  expect(mocks.enteringAsyncProfile).toBeCalled();
+  expect(mocks.enteringAsyncProfileResolved).toBeCalled();
+
+  await router.goTo(routes.home);
+
+  expect(router.currentPath).toBe('/');
+  expect(mocks.exitingAsyncProfile).toBeCalled()
+  expect(mocks.exitingAsyncProfileResolved).toBeCalled()
 });

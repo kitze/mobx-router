@@ -10,12 +10,45 @@ React = 'default' in React ? React['default'] : React;
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
 
 
 
 
+
+
+
+
+
+var asyncToGenerator = function (fn) {
+  return function () {
+    var gen = fn.apply(this, arguments);
+    return new Promise(function (resolve, reject) {
+      function step(key, arg) {
+        try {
+          var info = gen[key](arg);
+          var value = info.value;
+        } catch (error) {
+          reject(error);
+          return;
+        }
+
+        if (info.done) {
+          resolve(value);
+        } else {
+          return Promise.resolve(value).then(function (value) {
+            step("next", value);
+          }, function (err) {
+            step("throw", err);
+          });
+        }
+      }
+
+      return step("next");
+    });
+  };
+};
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -240,7 +273,7 @@ var Route = function () {
      Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
      */
     value: function replaceUrlParams(params) {
-      var queryParams = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var queryParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       params = mobx.toJS(params);
       queryParams = mobx.toJS(queryParams);
@@ -250,11 +283,10 @@ var Route = function () {
       var newPath = this.originalPath;
 
       getRegexMatches(this.originalPath, paramRegex, function (_ref) {
-        var _ref2 = slicedToArray(_ref, 3);
-
-        var fullMatch = _ref2[0];
-        var paramKey = _ref2[1];
-        var paramKeyWithoutColon = _ref2[2];
+        var _ref2 = slicedToArray(_ref, 3),
+            fullMatch = _ref2[0],
+            paramKey = _ref2[1],
+            paramKeyWithoutColon = _ref2[2];
 
         var value = params[paramKeyWithoutColon];
         newPath = value ? newPath.replace(paramKey, value) : newPath.replace('/' + paramKey, '');
@@ -274,11 +306,10 @@ var Route = function () {
 
       var params = [];
       getRegexMatches(this.originalPath, paramRegex, function (_ref3) {
-        var _ref4 = slicedToArray(_ref3, 3);
-
-        var fullMatch = _ref4[0];
-        var paramKey = _ref4[1];
-        var paramKeyWithoutColon = _ref4[2];
+        var _ref4 = slicedToArray(_ref3, 3),
+            fullMatch = _ref4[0],
+            paramKey = _ref4[1],
+            paramKeyWithoutColon = _ref4[2];
 
         params.push(paramKeyWithoutColon);
       });
@@ -346,6 +377,13 @@ function _applyDecoratedDescriptor(target, property, decorators, descriptor, con
 }
 
 var RouterStore = (_class = function () {
+  createClass(RouterStore, [{
+    key: 'currentPath',
+    get: function get() {
+      return this.currentView ? this.currentView.replaceUrlParams(this.params, this.queryParams) : '';
+    }
+  }]);
+
   function RouterStore() {
     classCallCheck(this, RouterStore);
 
@@ -360,45 +398,102 @@ var RouterStore = (_class = function () {
 
   createClass(RouterStore, [{
     key: 'goTo',
-    value: function goTo(view, paramsObj, store, queryParamsObj) {
+    value: function () {
+      var _ref = asyncToGenerator(regeneratorRuntime.mark(function _callee(view, paramsObj, store, queryParamsObj) {
+        var _this = this;
 
-      var nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
-      var pathChanged = nextPath !== this.currentPath;
+        var nextPath, pathChanged, rootViewChanged, currentParams, currentQueryParams, beforeExitResult, beforeEnterResult, nextParams, nextQueryParams;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
+                pathChanged = nextPath !== this.currentPath;
 
-      if (!pathChanged) {
-        return;
+                if (pathChanged) {
+                  _context.next = 4;
+                  break;
+                }
+
+                return _context.abrupt('return');
+
+              case 4:
+                rootViewChanged = !this.currentView || this.currentView.rootPath !== view.rootPath;
+                currentParams = mobx.toJS(this.params);
+                currentQueryParams = mobx.toJS(this.queryParams);
+
+                // Run `beforeExit` hook if it exists on the current view
+
+                if (!(rootViewChanged && this.currentView && this.currentView.beforeExit)) {
+                  _context.next = 13;
+                  break;
+                }
+
+                _context.next = 10;
+                return this.currentView.beforeExit(this.currentView, currentParams, store, currentQueryParams);
+
+              case 10:
+                beforeExitResult = _context.sent;
+
+                if (!(beforeExitResult === false)) {
+                  _context.next = 13;
+                  break;
+                }
+
+                return _context.abrupt('return');
+
+              case 13:
+                if (!(rootViewChanged && view.beforeEnter)) {
+                  _context.next = 19;
+                  break;
+                }
+
+                _context.next = 16;
+                return view.beforeEnter(view, currentParams, store, currentQueryParams);
+
+              case 16:
+                beforeEnterResult = _context.sent;
+
+                if (!(beforeEnterResult === false)) {
+                  _context.next = 19;
+                  break;
+                }
+
+                return _context.abrupt('return');
+
+              case 19:
+
+                // Run `onExit` hook if it exists on the current route
+                rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, currentParams, store, currentQueryParams);
+
+                // MobX requires us to update the state in `runAction` as this @action is now async (see https://mobx.js.org/refguide/action.html)
+                mobx.runInAction('update router state after async beforeExit and beforeEnter', function () {
+                  _this.currentView = view;
+                  _this.params = mobx.toJS(paramsObj);
+                  _this.queryParams = mobx.toJS(queryParamsObj);
+                });
+
+                nextParams = mobx.toJS(paramsObj);
+                nextQueryParams = mobx.toJS(queryParamsObj);
+
+
+                rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
+                !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store, nextQueryParams);
+
+              case 25:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function goTo(_x, _x2, _x3, _x4) {
+        return _ref.apply(this, arguments);
       }
 
-      var rootViewChanged = !this.currentView || this.currentView.rootPath !== view.rootPath;
-      var currentParams = mobx.toJS(this.params);
-      var currentQueryParams = mobx.toJS(this.queryParams);
-
-      var beforeExitResult = rootViewChanged && this.currentView && this.currentView.beforeExit ? this.currentView.beforeExit(this.currentView, currentParams, store, currentQueryParams) : true;
-      if (beforeExitResult === false) {
-        return;
-      }
-
-      var beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, currentParams, store, currentQueryParams) : true;
-      if (beforeEnterResult === false) {
-        return;
-      }
-
-      rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, currentParams, store, currentQueryParams);
-
-      this.currentView = view;
-      this.params = mobx.toJS(paramsObj);
-      this.queryParams = mobx.toJS(queryParamsObj);
-      var nextParams = mobx.toJS(paramsObj);
-      var nextQueryParams = mobx.toJS(queryParamsObj);
-
-      rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
-      !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store, nextQueryParams);
-    }
-  }, {
-    key: 'currentPath',
-    get: function get() {
-      return this.currentView ? this.currentView.replaceUrlParams(this.params, this.queryParams) : '';
-    }
+      return goTo;
+    }()
   }]);
   return RouterStore;
 }(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'params', [mobx.observable], {
@@ -414,7 +509,7 @@ var RouterStore = (_class = function () {
 }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'currentView', [mobx.observable], {
   enumerable: true,
   initializer: null
-}), _applyDecoratedDescriptor(_class.prototype, 'goTo', [mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
+}), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'goTo', [mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype)), _class);
 
 var createDirectorRouter = function createDirectorRouter(views, store) {
   new director_build_director.Router(_extends({}, viewsForDirector(views, store))).configure({
@@ -447,23 +542,23 @@ var MobxRouter = function MobxRouter(_ref) {
 var MobxRouter$1 = mobxReact.observer(['store'], MobxRouter);
 
 var Link = function Link(_ref) {
-  var view = _ref.view;
-  var className = _ref.className;
-  var _ref$params = _ref.params;
-  var params = _ref$params === undefined ? {} : _ref$params;
-  var _ref$queryParams = _ref.queryParams;
-  var queryParams = _ref$queryParams === undefined ? {} : _ref$queryParams;
-  var _ref$store = _ref.store;
-  var store = _ref$store === undefined ? {} : _ref$store;
-  var _ref$refresh = _ref.refresh;
-  var refresh = _ref$refresh === undefined ? false : _ref$refresh;
-  var _ref$style = _ref.style;
-  var style = _ref$style === undefined ? {} : _ref$style;
-  var children = _ref.children;
-  var _ref$title = _ref.title;
-  var title = _ref$title === undefined ? children : _ref$title;
-  var _ref$router = _ref.router;
-  var router = _ref$router === undefined ? store.router : _ref$router;
+  var view = _ref.view,
+      className = _ref.className,
+      _ref$params = _ref.params,
+      params = _ref$params === undefined ? {} : _ref$params,
+      _ref$queryParams = _ref.queryParams,
+      queryParams = _ref$queryParams === undefined ? {} : _ref$queryParams,
+      _ref$store = _ref.store,
+      store = _ref$store === undefined ? {} : _ref$store,
+      _ref$refresh = _ref.refresh,
+      refresh = _ref$refresh === undefined ? false : _ref$refresh,
+      _ref$style = _ref.style,
+      style = _ref$style === undefined ? {} : _ref$style,
+      children = _ref.children,
+      _ref$title = _ref.title,
+      title = _ref$title === undefined ? children : _ref$title,
+      _ref$router = _ref.router,
+      router = _ref$router === undefined ? store.router : _ref$router;
 
   if (!router) {
     return console.error('The router prop must be defined for a Link component to work!');
