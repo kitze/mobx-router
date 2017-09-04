@@ -2,13 +2,19 @@ import { action, autorun, computed, observable, toJS } from 'mobx';
 import queryString from 'query-string';
 import { Router } from 'director/build/director';
 import React from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
+
+
+
+
+
+
 
 
 
@@ -237,7 +243,7 @@ var Route = function () {
      Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
      */
     value: function replaceUrlParams(params) {
-      var queryParams = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var queryParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       params = toJS(params);
       queryParams = toJS(queryParams);
@@ -247,11 +253,10 @@ var Route = function () {
       var newPath = this.originalPath;
 
       getRegexMatches(this.originalPath, paramRegex, function (_ref) {
-        var _ref2 = slicedToArray(_ref, 3);
-
-        var fullMatch = _ref2[0];
-        var paramKey = _ref2[1];
-        var paramKeyWithoutColon = _ref2[2];
+        var _ref2 = slicedToArray(_ref, 3),
+            fullMatch = _ref2[0],
+            paramKey = _ref2[1],
+            paramKeyWithoutColon = _ref2[2];
 
         var value = params[paramKeyWithoutColon];
         newPath = value ? newPath.replace(paramKey, value) : newPath.replace('/' + paramKey, '');
@@ -271,11 +276,10 @@ var Route = function () {
 
       var params = [];
       getRegexMatches(this.originalPath, paramRegex, function (_ref3) {
-        var _ref4 = slicedToArray(_ref3, 3);
-
-        var fullMatch = _ref4[0];
-        var paramKey = _ref4[1];
-        var paramKeyWithoutColon = _ref4[2];
+        var _ref4 = slicedToArray(_ref3, 3),
+            fullMatch = _ref4[0],
+            paramKey = _ref4[1],
+            paramKeyWithoutColon = _ref4[2];
 
         params.push(paramKeyWithoutColon);
       });
@@ -353,9 +357,15 @@ var RouterStore = (_class = function () {
     _initDefineProp(this, 'currentView', _descriptor3, this);
 
     this.goTo = this.goTo.bind(this);
+    this.returnTo = this.returnTo.bind(this);
   }
 
   createClass(RouterStore, [{
+    key: 'returnTo',
+    value: function returnTo(store, defaultView) {
+      if (this.rejectedView) this.goTo(this.rejectedView, this.rejectedParams, store, this.rejectedQueryParams);else if (defaultView) this.goTo(defaultView.view, defaultView.params, store, defaultView.queryParams);else console.error('no rejected view to return to and no default view provided');
+    }
+  }, {
     key: 'goTo',
     value: function goTo(view, paramsObj, store, queryParamsObj) {
 
@@ -375,8 +385,18 @@ var RouterStore = (_class = function () {
         return;
       }
 
-      var beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, currentParams, store, currentQueryParams) : true;
+      var nextParams = toJS(paramsObj);
+      var nextQueryParams = toJS(queryParamsObj);
+
+      this.rejectedParams = null;
+      this.rejectedQueryParams = null;
+      this.rejectedView = null;
+
+      var beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, nextParams, store, nextQueryParams) : true;
       if (beforeEnterResult === false) {
+        this.rejectedParams = toJS(paramsObj);
+        this.rejectedQueryParams = toJS(queryParamsObj);
+        this.rejectedView = view;
         return;
       }
 
@@ -385,8 +405,6 @@ var RouterStore = (_class = function () {
       this.currentView = view;
       this.params = toJS(paramsObj);
       this.queryParams = toJS(queryParamsObj);
-      var nextParams = toJS(paramsObj);
-      var nextQueryParams = toJS(queryParamsObj);
 
       rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
       !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store, nextQueryParams);
@@ -411,7 +429,7 @@ var RouterStore = (_class = function () {
 }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'currentView', [observable], {
   enumerable: true,
   initializer: null
-}), _applyDecoratedDescriptor(_class.prototype, 'goTo', [action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
+}), _applyDecoratedDescriptor(_class.prototype, 'returnTo', [action], Object.getOwnPropertyDescriptor(_class.prototype, 'returnTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'goTo', [action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
 
 var createDirectorRouter = function createDirectorRouter(views, store) {
   new Router(_extends({}, viewsForDirector(views, store))).configure({
@@ -441,26 +459,26 @@ var MobxRouter = function MobxRouter(_ref) {
     router.currentView && router.currentView.component
   );
 };
-var MobxRouter$1 = observer(['store'], MobxRouter);
+var MobxRouter$1 = inject('store')(observer(MobxRouter));
 
 var Link = function Link(_ref) {
-  var view = _ref.view;
-  var className = _ref.className;
-  var _ref$params = _ref.params;
-  var params = _ref$params === undefined ? {} : _ref$params;
-  var _ref$queryParams = _ref.queryParams;
-  var queryParams = _ref$queryParams === undefined ? {} : _ref$queryParams;
-  var _ref$store = _ref.store;
-  var store = _ref$store === undefined ? {} : _ref$store;
-  var _ref$refresh = _ref.refresh;
-  var refresh = _ref$refresh === undefined ? false : _ref$refresh;
-  var _ref$style = _ref.style;
-  var style = _ref$style === undefined ? {} : _ref$style;
-  var children = _ref.children;
-  var _ref$title = _ref.title;
-  var title = _ref$title === undefined ? children : _ref$title;
-  var _ref$router = _ref.router;
-  var router = _ref$router === undefined ? store.router : _ref$router;
+  var view = _ref.view,
+      className = _ref.className,
+      _ref$params = _ref.params,
+      params = _ref$params === undefined ? {} : _ref$params,
+      _ref$queryParams = _ref.queryParams,
+      queryParams = _ref$queryParams === undefined ? {} : _ref$queryParams,
+      _ref$store = _ref.store,
+      store = _ref$store === undefined ? {} : _ref$store,
+      _ref$refresh = _ref.refresh,
+      refresh = _ref$refresh === undefined ? false : _ref$refresh,
+      _ref$style = _ref.style,
+      style = _ref$style === undefined ? {} : _ref$style,
+      children = _ref.children,
+      _ref$title = _ref.title,
+      title = _ref$title === undefined ? children : _ref$title,
+      _ref$router = _ref.router,
+      router = _ref$router === undefined ? store.router : _ref$router;
 
   if (!router) {
     return console.error('The router prop must be defined for a Link component to work!');

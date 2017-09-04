@@ -17,6 +17,7 @@ v0.0.6 🎉 - by [@thekitze](http://kitze.io)
 - The current URL params and query params are accessible directly in the store ```store.router.params``` / ```store.router.queryParams``` so basically they're available everywhere without any additional wrapping or HOC.
 - Navigating to another view happens by calling the ```goTo``` method on the router store, and the changes in the url are reflected automatically. So for example you can call ```router.goTo(views.book, {id:5, page:3})``` and after the change is made in the store, the URL change will follow. You never directly manipulate the URL or the history object.
 - ```<Link>``` component which also populates the href attribute and works with middle click or ```cmd/ctrl``` + click
+- If a ```beforeEnter``` was rejected, the rejected context (view, params, queryParams) are remembered, and a subsequent call to a ```returnTo``` method will retry the route.  This is useful for implementing pass-thru authentication on protected routes.  See below.
 
 ### Implementation
 ```js
@@ -118,6 +119,41 @@ const views = {
 };
 export default views;
 ```
+
+### Pass Through Authentication
+
+If you protect some routes with a ```isUserAuthenticated``` by providing a ```beforeEnter``` hook, you'd like to be able to go off to a login view, which will (easily) return back to the original failed route.  You might
+do this with the following ```views``` configuration:
+
+```javascript
+const views = {
+  home: new Route({
+    path: '/home',
+    component: <Home />,
+    beforeEnter:  (route, params, store, queryParams ) => {
+      if ( store.user.isAuthenticated ) return true;
+      store.router.goTo( routes.login );
+      return false;
+    }
+  }),
+  login: new Route({
+    path: '/login',
+    component: <Login />
+  })
+};
+```
+
+In the ```<Login />``` component, after authenticating the user, then do this:
+
+```javascript
+  store.router.returnTo( store, {
+    view: views.home,  // default view to redirect to, if there is not a pending rejection
+    params: null,      // default params to pass to default view
+    queryParams: null  // default queryParams to pass to default view
+  });
+```
+
+That way, after a successful login, the user will be either directed to the original attempted route, or a default route.
 
 ### ToDo
 - [ ] Add async support for the ```beforeEnter``` and ```beforeExit``` hooks
