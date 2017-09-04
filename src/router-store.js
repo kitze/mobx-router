@@ -8,6 +8,13 @@ class RouterStore {
 
   constructor() {
     this.goTo = this.goTo.bind(this);
+    this.returnTo = this.returnTo.bind(this);
+  }
+
+  @action returnTo( store, defaultView ) {
+    if ( this.rejectedView ) this.goTo( this.rejectedView, this.rejectedParams, store, this.rejectedQueryParams );
+    else if ( defaultView ) this.goTo( defaultView.view, defaultView.params, store, defaultView.queryParams );
+    else console.error( 'no rejected view to return to and no default view provided' );
   }
 
   @action goTo(view, paramsObj, store, queryParamsObj) {
@@ -31,8 +38,15 @@ class RouterStore {
     const nextParams = toJS(paramsObj);
     const nextQueryParams = toJS(queryParamsObj);
 
+    this.rejectedParams = null;
+    this.rejectedQueryParams = null;
+    this.rejectedView = null;
+    
     const beforeEnterResult = (rootViewChanged && view.beforeEnter) ? view.beforeEnter(view, nextParams, store, nextQueryParams) : true
     if (beforeEnterResult === false) {
+      this.rejectedParams = toJS(paramsObj);
+      this.rejectedQueryParams = toJS(queryParamsObj);
+      this.rejectedView = view;
       return;
     }
 

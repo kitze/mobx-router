@@ -357,9 +357,15 @@ var RouterStore = (_class = function () {
     _initDefineProp(this, 'currentView', _descriptor3, this);
 
     this.goTo = this.goTo.bind(this);
+    this.returnTo = this.returnTo.bind(this);
   }
 
   createClass(RouterStore, [{
+    key: 'returnTo',
+    value: function returnTo(store, defaultView) {
+      if (this.rejectedView) this.goTo(this.rejectedView, this.rejectedParams, store, this.rejectedQueryParams);else if (defaultView) this.goTo(defaultView.view, defaultView.params, store, defaultView.queryParams);else console.error('no rejected view to return to and no default view provided');
+    }
+  }, {
     key: 'goTo',
     value: function goTo(view, paramsObj, store, queryParamsObj) {
 
@@ -382,8 +388,15 @@ var RouterStore = (_class = function () {
       var nextParams = toJS(paramsObj);
       var nextQueryParams = toJS(queryParamsObj);
 
+      this.rejectedParams = null;
+      this.rejectedQueryParams = null;
+      this.rejectedView = null;
+
       var beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, nextParams, store, nextQueryParams) : true;
       if (beforeEnterResult === false) {
+        this.rejectedParams = toJS(paramsObj);
+        this.rejectedQueryParams = toJS(queryParamsObj);
+        this.rejectedView = view;
         return;
       }
 
@@ -416,7 +429,7 @@ var RouterStore = (_class = function () {
 }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'currentView', [observable], {
   enumerable: true,
   initializer: null
-}), _applyDecoratedDescriptor(_class.prototype, 'goTo', [action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
+}), _applyDecoratedDescriptor(_class.prototype, 'returnTo', [action], Object.getOwnPropertyDescriptor(_class.prototype, 'returnTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'goTo', [action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
 
 var createDirectorRouter = function createDirectorRouter(views, store) {
   new Router(_extends({}, viewsForDirector(views, store))).configure({
