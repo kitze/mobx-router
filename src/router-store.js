@@ -28,7 +28,10 @@ class RouterStore {
       return;
     }
 
-    const beforeEnterResult = (rootViewChanged && view.beforeEnter) ? view.beforeEnter(view, currentParams, store, currentQueryParams) : true
+    const nextParams = toJS(paramsObj);
+    const nextQueryParams = toJS(queryParamsObj);
+
+    const beforeEnterResult = (rootViewChanged && view.beforeEnter) ? view.beforeEnter(view, nextParams, store, nextQueryParams) : true
     if (beforeEnterResult === false) {
       return;
     }
@@ -38,8 +41,6 @@ class RouterStore {
     this.currentView = view;
     this.params = toJS(paramsObj);
     this.queryParams = toJS(queryParamsObj);
-    const nextParams = toJS(paramsObj);
-    const nextQueryParams = toJS(queryParamsObj);
 
     rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
     !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store, nextQueryParams);
