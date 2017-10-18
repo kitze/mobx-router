@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+      "declaration": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "importHelpers": true,
+      "isolatedModules": false,
+      "jsx": "react",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "noEmitHelpers": true,
+      "noLib": false,
+      "noImplicitAny": false,
+      "noUnusedLocals": false,
+      "noUnusedParameters": false,
+      "outDir": "dist/",
+      "preserveConstEnums": true,
+      "removeComments": true,
+      "skipDefaultLibCheck": true,
+      "skipLibCheck": true,
+      "strictNullChecks": false,
+      "suppressImplicitAnyIndexErrors": true,
+      "target": "es5"
+  },
+  "exclude": [
+      "node_modules",
+      "dist",
+      "build"
+  ]
+}

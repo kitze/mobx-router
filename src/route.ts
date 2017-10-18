@@ -1,23 +1,30 @@
+import * as queryString from 'query-string';
+
 import {toJS} from 'mobx';
+
 import {getObjectKeys} from './utils';
 import {paramRegex, optionalRegex} from './regex';
 import {getRegexMatches} from './utils';
-import queryString from 'query-string';
 
-class Route {
+
+export type Callback = (route: any, params: any, store: any, queryParams: any) => void;
+export type ConfirmCallback = (route: any, params: any, store: any, queryParams: any) => boolean;
+
+export class Route {
 
   //props
-  component;
-  path;
-  rootPath;
+  component: React.ComponentType;
+  path: string;
+  rootPath: string;
+  originalPath = ''
 
   //lifecycle methods
-  onEnter;
-  onExit;
-  beforeEnter;
-  beforeExit;
+  onEnter: Callback;
+  onExit: Callback;
+  beforeEnter: ConfirmCallback;
+  beforeExit: ConfirmCallback;
 
-  constructor(props) {
+  constructor(props: any) {
     getObjectKeys(props).forEach((propKey) => this[propKey] = props[propKey]);
     this.originalPath = this.path;
 
@@ -44,7 +51,7 @@ class Route {
    replaces url params placeholders with params from an object
    Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
    */
-  replaceUrlParams(params, queryParams = {}) {
+  replaceUrlParams(params: any, queryParams: any = {}) {
     params = toJS(params);
     queryParams = toJS(queryParams);
 
@@ -52,7 +59,7 @@ class Route {
     const hasQueryParams = queryParamsString !== '';
     let newPath = this.originalPath;
 
-    getRegexMatches(this.originalPath, paramRegex, ([fullMatch, paramKey, paramKeyWithoutColon]) => {
+    getRegexMatches(this.originalPath, paramRegex, ([_fullMatch, paramKey, paramKeyWithoutColon]: any) => {
       const value = params[paramKeyWithoutColon];
       newPath = value ? newPath.replace(paramKey, value) : newPath.replace(`/${paramKey}`, '');
     });
@@ -64,10 +71,10 @@ class Route {
    converts an array of params [123, 100] to an object
    Example: if the current this.path is /book/:id/page/:pageId it will return {id:123, pageId:100}
    */
-  getParamsObject(paramsArray) {
+  getParamsObject(paramsArray: string[]) {
 
-    const params = [];
-    getRegexMatches(this.originalPath, paramRegex, ([fullMatch, paramKey, paramKeyWithoutColon]) => {
+    const params: any = [];
+    getRegexMatches(this.originalPath, paramRegex, ([_fullMatch, _paramKey, paramKeyWithoutColon]: any[]) => {
       params.push(paramKeyWithoutColon);
     });
 
@@ -79,7 +86,7 @@ class Route {
     return result;
   }
 
-  goTo(store, paramsArr) {
+  goTo(store: any, paramsArr: string[]) {
     const paramsObject = this.getParamsObject(paramsArr);
     const queryParamsObject = queryString.parse(window.location.search);
     store.router.goTo(this, paramsObject, store, queryParamsObject);

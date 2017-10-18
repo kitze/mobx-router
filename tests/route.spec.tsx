@@ -1,4 +1,5 @@
-import React from 'react';
+import * as React from 'react';
+
 import Route from '../src/route';
 
 test('Route', () => {
