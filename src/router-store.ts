@@ -4,13 +4,13 @@ class RouterStore {
 
   @observable params = {};
   @observable queryParams = {};
-  @observable currentView;
+  @observable currentView: any;
 
   constructor() {
     this.goTo = this.goTo.bind(this);
   }
 
-  @action goTo(view, paramsObj, store, queryParamsObj) {
+  @action goTo(view: any, paramsObj: any, store: any, queryParamsObj: any) {
 
     const nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
     const pathChanged = nextPath !== this.currentPath;

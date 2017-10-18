@@ -2,8 +2,7 @@
   "name": "mobx-router",
   "version": "0.0.7",
   "description": "A simple router for MobX",
-  "main": "dist/mobx-router.js",
-  "jsnext:main": "dist/mobx-router.es2015.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest",
     "build": "./node_modules/rollup-babel-lib-bundler/bin/index.js index.js"
@@ -26,9 +25,13 @@
   "homepage": "https://github.com/kitze/mobx-router#readme",
   "dependencies": {
     "director": "1.2.8",
-    "query-string": "^5.0.0"
+    "query-string": "^5.0.0",
+    "tslib": "^1.8.0"
   },
   "devDependencies": {
+    "@types/node": "^8.0.44",
+    "@types/react": "^16.0.13",
+    "@types/react-dom": "^16.0.1",
     "babel-jest": "^21.2.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-decorators-legacy": "1.3.4",
@@ -48,9 +51,13 @@
   },
   "rollupBabelLibBundler": {
     "moduleName": "mobxRouter",
-    "external": [ "react" ],
+    "external": [
+      "react"
+    ],
     "namedExports": {
-      "node_modules/react/index.js": ["createElement"]
+      "node_modules/react/index.js": [
+        "createElement"
+      ]
     },
     "dest": "dist",
     "babel": {

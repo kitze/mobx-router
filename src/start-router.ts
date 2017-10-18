@@ -2,7 +2,7 @@ import {Router} from 'director/build/director';
 import {autorun} from 'mobx';
 import {viewsForDirector} from './utils';
 
-const createDirectorRouter = (views, store) => {
+const createDirectorRouter = (views: any, store: any) => {
   new Router({
     ...viewsForDirector(views, store)
   }).configure({
@@ -10,7 +10,7 @@ const createDirectorRouter = (views, store) => {
   }).init();
 };
 
-const startRouter = (views, store) => {
+const startRouter = (views: any, store: any) => {
   //create director configuration
   createDirectorRouter(views, store);
 
