@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {observer} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 import { Route } from '../../index';
 
 export type Props = {
@@ -15,7 +15,7 @@ export type Props = {
   router: any;
 }
 
-const Link = ({view, className, params = {}, queryParams = {}, store = {}, refresh = false, style = {}, children, title = children, router = store.router}: Props) => {
+export const Link = ({view, className, params = {}, queryParams = {}, store = {}, refresh = false, style = {}, children, title = children, router = store.router}: Props) => {
   if (!router) {
     return console.error('The router prop must be defined for a Link component to work!')
   }
@@ -39,4 +39,4 @@ const Link = ({view, className, params = {}, queryParams = {}, store = {}, refre
   )
 }
 
-export default observer(Link as any);
+export default inject('store')(observer(Link as any));
