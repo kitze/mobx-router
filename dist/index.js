@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const route_1 = require("./src/route");
+var route_1 = require("./src/route");
 exports.Route = route_1.default;
-const router_store_1 = require("./src/router-store");
+var router_store_1 = require("./src/router-store");
 exports.RouterStore = router_store_1.default;
-const start_router_1 = require("./src/start-router");
+var start_router_1 = require("./src/start-router");
 exports.startRouter = start_router_1.default;
-const MobxRouter_1 = require("./src/components/MobxRouter");
+var MobxRouter_1 = require("./src/components/MobxRouter");
 exports.MobxRouter = MobxRouter_1.default;
-const Link_1 = require("./src/components/Link");
+var Link_1 = require("./src/components/Link");
 exports.Link = Link_1.default;

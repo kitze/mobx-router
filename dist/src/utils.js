@@ -1,14 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isObject = (obj) => obj && typeof obj === 'object' && !(Array.isArray(obj));
-exports.getObjectKeys = (obj) => exports.isObject(obj) ? Object.keys(obj) : [];
-exports.viewsForDirector = (views, store) => exports.getObjectKeys(views).reduce((obj, viewKey) => {
-    const view = views[viewKey];
-    obj[view.path] = (...paramsArr) => view.goTo(store, paramsArr);
+exports.isObject = function (obj) { return obj && typeof obj === 'object' && !(Array.isArray(obj)); };
+exports.getObjectKeys = function (obj) { return exports.isObject(obj) ? Object.keys(obj) : []; };
+exports.viewsForDirector = function (views, store) { return exports.getObjectKeys(views).reduce(function (obj, viewKey) {
+    var view = views[viewKey];
+    obj[view.path] = function () {
+        var paramsArr = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            paramsArr[_i] = arguments[_i];
+        }
+        return view.goTo(store, paramsArr);
+    };
     return obj;
-}, {});
-exports.getRegexMatches = (string, regexExpression, callback) => {
-    let match;
+}, {}); };
+exports.getRegexMatches = function (string, regexExpression, callback) {
+    var match;
     while ((match = regexExpression.exec(string)) !== null) {
         callback(match);
     }

@@ -3,7 +3,7 @@ declare class RouterStore {
     queryParams: {};
     currentView: any;
     constructor();
-    goTo(view: any, paramsObj: any, store: any, queryParamsObj: any): void;
+    goTo(view: any, paramsObj?: any, store?: any, queryParamsObj?: any): void;
     readonly currentPath: any;
 }
 export default RouterStore;

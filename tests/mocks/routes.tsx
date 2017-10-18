@@ -1,6 +1,7 @@
+import * as React from 'react';
+
 import Route from '../../src/route';
 import mocks from './mocks';
-import React from 'react';
 
 const routes = {
   home: new Route({

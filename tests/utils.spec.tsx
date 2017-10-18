@@ -1,7 +1,8 @@
+import * as React from 'react';
+
 import {viewsForDirector, isObject, getObjectKeys, getRegexMatches} from '../src/utils';
 import {paramRegex} from '../src/regex';
 
-import React from 'react';
 import Route from '../src/route';
 
 test('viewsForDirector', () => {

@@ -10,17 +10,17 @@
       "moduleResolution": "node",
       "noEmitHelpers": true,
       "noLib": false,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
+      "noImplicitAny": false,
+      "noUnusedLocals": false,
+      "noUnusedParameters": false,
       "outDir": "dist/",
       "preserveConstEnums": true,
       "removeComments": true,
       "skipDefaultLibCheck": true,
       "skipLibCheck": true,
-      "strict": true,
       "strictNullChecks": false,
       "suppressImplicitAnyIndexErrors": true,
-      "target": "es2015"
+      "target": "es5"
   },
   "exclude": [
       "node_modules",
