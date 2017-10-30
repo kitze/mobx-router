@@ -20,14 +20,14 @@ test('Router Scenario', () => {
 
   expect(router.currentPath).toBe('/profile/kristijan');
   expect(mocks.enteringProfile).toHaveBeenCalledTimes(1);
-  expect(mocks.changingParamsProfile).lastCalledWith({username: 'kristijan'}, undefined);
+  expect(mocks.changingParamsProfile).lastCalledWith({username: 'kitze'}, {id: 123});
   expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(1);
 
   router.goTo(routes.profile, {username: 'kristijan', tab: 'about'});
 
   expect(router.currentPath).toBe('/profile/kristijan/about');
   expect(mocks.enteringProfile).toHaveBeenCalledTimes(1);
-  expect(mocks.changingParamsProfile).lastCalledWith({tab: 'about', username: 'kristijan'}, undefined);
+  expect(mocks.changingParamsProfile).lastCalledWith({username: 'kristijan'}, undefined);
   expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(2);
 
   router.goTo(routes.home);
@@ -43,7 +43,7 @@ test('Router Scenario', () => {
   router.goTo(routes.profile, {username: 'kristijan', tab: 'about'});
 
   expect(router.currentPath).toBe('/profile/kristijan/about');
-  expect(mocks.changingParamsProfile).lastCalledWith({tab: 'about', username: 'kristijan'}, undefined);
+  expect(mocks.changingParamsProfile).lastCalledWith(undefined, undefined);
   expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(2);
 
   router.goTo(routes.profile, {username: 'kristijan', tab: 'about'});
@@ -55,13 +55,13 @@ test('Router Scenario', () => {
   router.goTo(routes.profile, {username: 'kristijan', tab: 'about'}, null, {id: 123});
 
   expect(router.currentPath).toBe('/profile/kristijan/about?id=123');
-  expect(mocks.changingParamsProfile).lastCalledWith({tab: 'about', username: 'kristijan'}, {id: 123});
+  expect(mocks.changingParamsProfile).lastCalledWith({tab: 'about', username: 'kristijan'}, undefined);
   expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(3);
 
   router.goTo(routes.profile, {username: 'kristijan', tab: 'about'});
 
   expect(router.currentPath).toBe('/profile/kristijan/about');
-  expect(mocks.changingParamsProfile).lastCalledWith({tab: 'about', username: 'kristijan'}, undefined);
+  expect(mocks.changingParamsProfile).lastCalledWith({tab: 'about', username: 'kristijan'}, {id: 123});
   expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(4);
 
 });

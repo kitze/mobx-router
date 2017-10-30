@@ -19,7 +19,7 @@ class RouterStore {
       return;
     }
 
-    const rootViewChanged = !this.currentView || (this.currentView.rootPath !== view.rootPath);
+    const rootViewChanged = !this.currentView || (this.currentView !== view);
     const currentParams = toJS(this.params);
     const currentQueryParams = toJS(this.queryParams);
 
@@ -32,17 +32,21 @@ class RouterStore {
     if (beforeEnterResult === false) {
       return;
     }
+    const nextParams = toJS(paramsObj);
+    const nextQueryParams = toJS(queryParamsObj);
 
     rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, currentParams, store, currentQueryParams);
+
+    const origParams = toJS(this.params)
+    const origQueryParams = toJS(this.queryParams)
 
     this.currentView = view;
     this.params = toJS(paramsObj);
     this.queryParams = toJS(queryParamsObj);
-    const nextParams = toJS(paramsObj);
-    const nextQueryParams = toJS(queryParamsObj);
 
     rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
-    !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store, nextQueryParams);
+    !rootViewChanged && this.currentView && this.currentView.onParamsChange &&
+      this.currentView.onParamsChange(this.currentView, origParams, store, origQueryParams);
   }
 
   @computed get currentPath() {
