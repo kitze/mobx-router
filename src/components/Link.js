@@ -3,7 +3,8 @@ import {observer} from 'mobx-react';
 
 const Link = ({view, className, params = {}, queryParams = {}, store = {}, refresh = false, style = {}, children, title = children, router = store.router}) => {
   if (!router) {
-    return console.error('The router prop must be defined for a Link component to work!')
+    console.error('The router prop must be defined for a Link component to work!')
+    return null;
   }
   return (<a
       style={style}
