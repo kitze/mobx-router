@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 import React from 'react';
-import Route from '../src/route';
+import { Route } from '../src/route';
 
 test('Route', () => {
     const route = new Route({

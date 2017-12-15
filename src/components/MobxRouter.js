@@ -2,7 +2,8 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 
-const MobxRouter = ({ store: { router } }) => (
+const MobxRouterBase = ({ store: { router } }) => (
     <div>{router.currentView && router.currentView.component}</div>
 );
-export default inject('store')(observer(MobxRouter));
+
+export const MobxRouter = inject('store')(observer(MobxRouterBase));

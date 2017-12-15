@@ -2,7 +2,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
-const Link = ({
+const LinkBase = ({
     view,
     className,
     params = {},
@@ -43,4 +43,4 @@ const Link = ({
     );
 };
 
-export default observer(Link);
+export const Link = observer(LinkBase);

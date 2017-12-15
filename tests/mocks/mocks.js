@@ -1,4 +1,4 @@
-const mocks = {
+export const mocks = {
     enteringHome: jest.fn(),
     exitingHome: jest.fn(),
     enteringProfile: jest.fn(),
@@ -6,5 +6,3 @@ const mocks = {
     changingParamsProfile: jest.fn(),
     changingParamsHome: jest.fn()
 };
-
-export default mocks;
