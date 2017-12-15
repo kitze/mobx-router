@@ -2,8 +2,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { observer } from 'mobx-react';
-import Route from '../src/route';
-import RouterStore from '../src/router-store';
+import { Route } from '../src/route';
+import { RouterStore } from '../src/router-store';
 
 const router = new RouterStore();
 const store = {

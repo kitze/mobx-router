@@ -1,9 +1,9 @@
 // eslint-disable-next-line
 import React from 'react';
-import Route from '../../src/route';
-import mocks from './mocks';
+import { Route } from '../../src/route';
+import { mocks } from './mocks';
 
-const routes = {
+export const routes = {
     home: new Route({
         path: '/',
         component: <div />,
@@ -31,5 +31,3 @@ const routes = {
         }
     })
 };
-
-export default routes;

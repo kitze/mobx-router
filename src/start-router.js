@@ -12,7 +12,7 @@ const createDirectorRouter = (views, store) => {
         .init();
 };
 
-const startRouter = (views, store) => {
+export const startRouter = (views, store) => {
     //create director configuration
     createDirectorRouter(views, store);
 
@@ -24,5 +24,3 @@ const startRouter = (views, store) => {
         }
     });
 };
-
-export default startRouter;

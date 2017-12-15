@@ -1,6 +1,6 @@
-import RouterStore from '../src/router-store';
-import routes from './mocks/routes';
-import mocks from './mocks/mocks';
+import { RouterStore } from '../src/router-store';
+import { routes } from './mocks/routes';
+import { mocks } from './mocks/mocks';
 
 test('Router Scenario', () => {
     const router = new RouterStore();

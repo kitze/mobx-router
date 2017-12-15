@@ -4,7 +4,7 @@ import { paramRegex, optionalRegex } from './regex';
 import { getRegexMatches } from './utils';
 import queryString from 'query-string';
 
-class Route {
+export class Route {
     //props
     component;
     path;
@@ -105,5 +105,3 @@ class Route {
         store.router.goTo(this, paramsObject, store, queryParamsObject);
     }
 }
-
-export default Route;

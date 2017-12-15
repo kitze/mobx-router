@@ -7,7 +7,7 @@ import {
     getRegexMatches
 } from '../src/utils';
 import { paramRegex } from '../src/regex';
-import Route from '../src/route';
+import { Route } from '../src/route';
 
 test('viewsForDirector', () => {
     const views = {
