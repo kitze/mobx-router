@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+import React from 'react';
 import { observer, inject } from 'mobx-react';
 
 const MobxRouter = ({ store: { router } }) => (

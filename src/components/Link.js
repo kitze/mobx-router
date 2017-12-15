@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+import React from 'react';
 import { observer } from 'mobx-react';
 
 const Link = ({
