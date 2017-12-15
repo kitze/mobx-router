@@ -1,6 +1,7 @@
+// eslint-disable-next-line
 import React from 'react';
-import {shallow} from 'enzyme';
-import {observer} from 'mobx-react';
+import { shallow } from 'enzyme';
+import { observer } from 'mobx-react';
 import Route from '../src/route';
 import RouterStore from '../src/router-store';
 
@@ -9,19 +10,26 @@ const store = {
     router: router
 };
 
+// eslint-disable-next-line
 const UserProfile = observer(function UserProfile() {
-    const {router:{params, goTo}} = store;
+    const { router: { params, goTo } } = store;
 
     return (
         <div>
             <button
                 name="tab1-button"
-                onClick={() => goTo(routes.profile, {username: 'john', tab: 'tab1'})}>
+                onClick={() =>
+                    goTo(routes.profile, { username: 'john', tab: 'tab1' })
+                }
+            >
                 Tab 1
             </button>
             <button
                 name="tab2-button"
-                onClick={() => goTo(routes.profile, {username: 'john', tab: 'tab2'})}>
+                onClick={() =>
+                    goTo(routes.profile, { username: 'john', tab: 'tab2' })
+                }
+            >
                 Tab 2
             </button>
 
@@ -40,7 +48,7 @@ const routes = {
 
 test('UserProfile changes tabs when a tab button is clicked', () => {
     // Set up router state to point to profile page and tab 1
-    router.goTo(routes.profile, {username: 'john', tab: 'tab1'});
+    router.goTo(routes.profile, { username: 'john', tab: 'tab1' });
 
     // Render the UserProfile and make sure it is on tab 1
     const wrapper = shallow(<UserProfile />);

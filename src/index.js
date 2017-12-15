@@ -6,4 +6,4 @@ import startRouter from './start-router';
 import MobxRouter from './components/MobxRouter';
 import Link from './components/Link';
 
-export {Route, MobxRouter, Link, RouterStore, startRouter};
+export { Route, MobxRouter, Link, RouterStore, startRouter };
