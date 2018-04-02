@@ -19,7 +19,7 @@ export const startRouter = (views, store) => {
     //autorun and watch for path changes
     autorun(() => {
         const { currentPath } = store.router;
-        if (currentPath !== window.location.pathname) {
+        if (currentPath !== (window.location.pathname + window.location.search)) {
             window.history.pushState(null, null, currentPath);
         }
     });

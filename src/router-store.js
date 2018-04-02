@@ -19,7 +19,7 @@ export class RouterStore {
         }
 
         const rootViewChanged =
-            !this.currentView || this.currentView.rootPath !== view.rootPath;
+            !this.currentView || this.currentView.rootPath !== view.rootPath || this.currentView.name !== view.name;
         const currentParams = toJS(this.params);
         const currentQueryParams = toJS(this.queryParams);
 
