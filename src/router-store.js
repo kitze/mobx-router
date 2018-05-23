@@ -10,7 +10,7 @@ export class RouterStore {
     }
 
     @action
-    goTo(view, paramsObj, store, queryParamsObj) {
+    async goTo(view, paramsObj, store, queryParamsObj) {
         const nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
         const pathChanged = nextPath !== this.currentPath;
 
@@ -18,8 +18,7 @@ export class RouterStore {
             return;
         }
 
-        const rootViewChanged =
-            !this.currentView || this.currentView.rootPath !== view.rootPath || this.currentView.name !== view.name;
+        const rootViewChanged = !this.currentView || this.currentView !== view;
         const currentParams = toJS(this.params);
         const currentQueryParams = toJS(this.queryParams);
 
@@ -32,7 +31,7 @@ export class RouterStore {
                       currentQueryParams
                   )
                 : true;
-        if (beforeExitResult === false) {
+        if ((await beforeExitResult) === false) {
             return;
         }
 
@@ -45,7 +44,7 @@ export class RouterStore {
                       currentQueryParams
                   )
                 : true;
-        if (beforeEnterResult === false) {
+        if ((await beforeEnterResult) === false) {
             return;
         }
 
