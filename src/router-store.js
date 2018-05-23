@@ -24,27 +24,27 @@ export class RouterStore {
 
         const beforeExitResult =
             rootViewChanged && this.currentView && this.currentView.beforeExit
-                ? this.currentView.beforeExit(
+                ? await this.currentView.beforeExit(
                       this.currentView,
                       currentParams,
                       store,
                       currentQueryParams
                   )
                 : true;
-        if ((await beforeExitResult) === false) {
+        if (beforeExitResult === false) {
             return;
         }
 
         const beforeEnterResult =
             rootViewChanged && view.beforeEnter
-                ? view.beforeEnter(
+                ? await view.beforeEnter(
                       view,
                       currentParams,
                       store,
                       currentQueryParams
                   )
                 : true;
-        if ((await beforeEnterResult) === false) {
+        if (beforeEnterResult === false) {
             return;
         }
 
