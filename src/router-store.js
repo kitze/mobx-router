@@ -28,7 +28,8 @@ export class RouterStore {
                       this.currentView,
                       currentParams,
                       store,
-                      currentQueryParams
+                      currentQueryParams,
+                      nextPath
                   )
                 : true;
         if (beforeExitResult === false) {
@@ -41,7 +42,8 @@ export class RouterStore {
                       view,
                       currentParams,
                       store,
-                      currentQueryParams
+                      currentQueryParams,
+                      nextPath
                   )
                 : true;
         if (beforeEnterResult === false) {
@@ -55,7 +57,8 @@ export class RouterStore {
                 this.currentView,
                 currentParams,
                 store,
-                currentQueryParams
+                currentQueryParams,
+                nextPath
             );
 
         this.currentView = view;
