@@ -4,7 +4,7 @@ import { observer, inject } from 'mobx-react';
 
 const MobxRouterBase = ({ store: { router } }) => {
     router.currentView && router.currentView.component ? (
-        outer.currentView.component
+        router.currentView.component
     ) : (
         <div />
     );
