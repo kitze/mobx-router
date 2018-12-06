@@ -1,6 +1,6 @@
 {
   "name": "mobx-router",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "A simple router for MobX",
   "main": "dist/index.js",
   "files": [
@@ -39,9 +39,9 @@
     "query-string": "^5.0.1"
   },
   "peerDependencies": {
-    "react": "16.x",
     "mobx": "^3.x",
-    "mobx-react": "^4.x"
+    "mobx-react": "^4.x",
+    "react": "16.x"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
