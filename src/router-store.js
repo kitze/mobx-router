@@ -40,9 +40,9 @@ export class RouterStore {
             rootViewChanged && view.beforeEnter
                 ? await view.beforeEnter(
                       view,
-                      currentParams,
+                      toJS(paramsObj),
                       store,
-                      currentQueryParams,
+                      toJS(queryParamsObj),
                       nextPath
                   )
                 : true;
