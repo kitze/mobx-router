@@ -1,4 +1,4 @@
-import { observable, computed, action, toJS } from 'mobx';
+import { observable, computed, action, toJS, transaction } from 'mobx';
 
 export class RouterStore {
     @observable params = {};
@@ -61,9 +61,12 @@ export class RouterStore {
                 nextPath
             );
 
-        this.currentView = view;
-        this.params = toJS(paramsObj);
-        this.queryParams = toJS(queryParamsObj);
+        transaction(() => {
+            this.currentView = view;
+            this.params = toJS(paramsObj);
+            this.queryParams = toJS(queryParamsObj);
+        });
+
         const nextParams = toJS(paramsObj);
         const nextQueryParams = toJS(queryParamsObj);
 
