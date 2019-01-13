@@ -1,4 +1,4 @@
-import { observable, computed, action, toJS, transaction } from 'mobx';
+import { observable, computed, action, toJS, runInAction } from 'mobx';
 
 export class RouterStore {
     @observable params = {};
