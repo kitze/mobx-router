@@ -1,5 +1,11 @@
+### Other projects:
+- 🏫 [React Academy](https://reactacademy.io) - Interactive React and GraphQL workshops
+- 💌 [Twizzy](https://twizzy.app) - A standalone app for Twitter DM
+- 💻 [Sizzy](https://sizzy.co) - A tool for testing responsive design on multiple devices at once
+
+---
+
 # 〽️ MobX Router
-v0.0.11 🎉 - by [@thekitze](http://kitze.io)
 
 ### Example usage
 * [Demo project](http://mobx-router-example.netlify.com/)
