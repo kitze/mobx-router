@@ -65,9 +65,10 @@ export class Route {
             // eslint-disable-next-line
             ([fullMatch, paramKey, paramKeyWithoutColon]) => {
                 const value = jsParams[paramKeyWithoutColon];
-                newPath = value
-                    ? newPath.replace(paramKey, value)
-                    : newPath.replace(`/${paramKey}`, '');
+                newPath =
+                    value !== undefined
+                        ? newPath.replace(paramKey, value)
+                        : newPath.replace(`/${paramKey}`, '');
             }
         );
 
