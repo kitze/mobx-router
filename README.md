@@ -127,7 +127,3 @@ const views = {
 };
 export default views;
 ```
-
-### ToDo
-- [ ] Add async support for the ```beforeEnter``` and ```beforeExit``` hooks
-- [ ] Add array support for the hooks so they can execute multiple methods. A sample usage of this would be having one ```isUserAuthenticated``` method that can be just plugged in as one of the callbacks triggered from the hook.
