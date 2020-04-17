@@ -1,6 +1,6 @@
 {
   "name": "mobx-router",
-  "version": "0.0.20",
+  "version": "0.1.0",
   "description": "A simple router for MobX",
   "main": "dist/index.js",
   "files": [
@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "lint": "eslint '{src,tests}/**/*.js'",
-    "test": "jest",
+    "test": "jest --env=node",
     "build": "del-cli dist && npm run lint && babel src -d dist",
     "format": "prettier --print-width 80 --tab-width 4 --single-quote --write '{src,tests}/**/*.js'",
     "precommit": "lint-staged"

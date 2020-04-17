@@ -1,4 +1,4 @@
-### 🙋‍♂️ Made by [@thekitze](https://twitter.com/thekitze)  
+### 🙋‍♂️ Made by [@thekitze](https://twitter.com/thekitze)
 
 ### Other projects:
 - 🏫 [React Academy](https://reactacademy.io) - Interactive React and GraphQL workshops
@@ -29,9 +29,8 @@
 
 ### Implementation
 ```js
-import React from 'react';
+import React, {createContext} from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'mobx-react';
 
 import {MobxRouter, RouterStore, startRouter} from 'mobx-router';
 import views from 'config/views';
@@ -46,12 +45,16 @@ const store = {
 	router: new RouterStore()
 };
 
+// Use React context to make your store available in your application
+const StoreContext = createContext({});
+const StoreProvider = StoreContext.Provider;
+
 startRouter(views, store);
 
 ReactDOM.render(
-  <Provider store={store}>
-  	<MobxRouter/>
-  </Provider>, document.getElementById('root')
+  <StoreProvider store={store}>
+  	<MobxRouter store={store}/>
+  </StoreProvider>, document.getElementById('root')
 )
 ```
 
