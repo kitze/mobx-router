@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "A simple router for MobX",
   "main": "dist/index.js",
+  "types": "types/index.d.ts",
   "files": [
     "dist/",
     "src/",
