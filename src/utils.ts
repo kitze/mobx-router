@@ -9,7 +9,11 @@ export const viewsForDirector = (views, store) =>
         return obj;
     }, {});
 
-export const getRegexMatches = (string, regexExpression, callback) => {
+export const getRegexMatches = (
+    string: string,
+    regexExpression: RegExp,
+    callback: (result: RegExpExecArray) => void,
+) => {
     let match;
     while ((match = regexExpression.exec(string)) !== null) {
         callback(match);

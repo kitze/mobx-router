@@ -35,7 +35,7 @@
   "homepage": "https://github.com/kitze/mobx-router#readme",
   "dependencies": {
     "director": "1.2.8",
-    "query-string": "^5.0.1"
+    "query-string": "^6.12.1"
   },
   "peerDependencies": {
     "mobx": "^3.x",

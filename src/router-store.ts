@@ -1,5 +1,9 @@
 import { observable, computed, action, toJS, runInAction } from 'mobx';
 
+export interface Store {
+    router: RouterStore;
+};
+
 export class RouterStore {
     @observable params = {};
     @observable queryParams = {};
