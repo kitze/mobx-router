@@ -1,11 +1,26 @@
 import { toJS } from 'mobx';
-import queryString from 'query-string';
+import queryString, { ParsedQuery } from 'query-string';
 
 import { paramRegex, optionalRegex } from './regex';
 import { getRegexMatches } from './utils';
 import { Store } from './router-store';
 
-export class Route<S extends Store, P extends { [key: string]: string }> {
+export type RoutesConfig = {
+    [path: string]: Route;
+};
+
+export type RouteParams = {
+    [key: string]: string;
+};
+
+export type QueryParams = {
+    [key: string]: string;
+};
+
+export class Route<
+    S extends Store = Store,
+    P extends RouteParams = {},
+    > {
     //props
     path: string;
     readonly originalPath: string;
@@ -14,11 +29,11 @@ export class Route<S extends Store, P extends { [key: string]: string }> {
     readonly title?: string;
 
     //lifecycle methods
-    readonly onEnter?: (route: Route<S, P>, params: any, store: any, queryParams: any) => void;
-    readonly beforeEnter?: (route: Route<S, P>, params: any, store: any) => boolean;
-    readonly beforeExit?: (route: Route<S, P>, params: any, store: any) => void | false;
-    readonly onParamsChange?: (route: Route<S, P>, params: any, store: any, queryParams: any) => void;
-    readonly onExit: any;
+    readonly onEnter?: (route: Route<S, P>, params: P, store: S, currentQueryParams: ParsedQuery) => void;
+    readonly beforeEnter?: (route: Route<S, P>, params: P, store: S, currentQueryParams: ParsedQuery, nextPath: string) => boolean;
+    readonly beforeExit?: (route: Route<S, P>, params: P, store: S, currentQueryParams: ParsedQuery, nextPath: string) => void | false;
+    readonly onParamsChange?: (route: Route<S, P>, params: P, store: S, currentQueryParams: ParsedQuery) => void;
+    readonly onExit?: (route: Route<S, P>, params: P, store: S, currentQueryParams: ParsedQuery, nextPath: string) => void;
 
     constructor({
         path,
@@ -27,6 +42,7 @@ export class Route<S extends Store, P extends { [key: string]: string }> {
         beforeExit,
         onParamsChange,
         beforeEnter,
+        onExit,
         title,
     }: {
         path: string,
@@ -35,6 +51,7 @@ export class Route<S extends Store, P extends { [key: string]: string }> {
         beforeExit?: Route<S, P>["beforeExit"],
         onParamsChange?: Route<S, P>["onParamsChange"],
         beforeEnter?: Route<S, P>["beforeEnter"];
+        onExit?: Route<S, P>["onExit"];
         title?: string
     }) {
 
@@ -45,6 +62,7 @@ export class Route<S extends Store, P extends { [key: string]: string }> {
         this.onParamsChange = onParamsChange;
         this.beforeEnter = beforeEnter;
         this.title = title;
+        this.onExit = onExit;
 
         this.originalPath = this.path;
 
@@ -107,8 +125,8 @@ export class Route<S extends Store, P extends { [key: string]: string }> {
    converts an array of params [123, 100] to an object
    Example: if the current this.path is /book/:id/page/:pageId it will return {id:123, pageId:100}
    */
-    getParamsObject(paramsArray: string[]) {
-        const params = [] as string[];
+    getParamsObject<P extends RouteParams>(paramValues: P[keyof P][]) {
+        const params = [] as (keyof P)[];
         getRegexMatches(
             this.originalPath,
             paramRegex,
@@ -118,16 +136,15 @@ export class Route<S extends Store, P extends { [key: string]: string }> {
             }
         );
 
-        const result = paramsArray.reduce((obj, paramValue, index) => {
+        const result = paramValues.reduce((obj, paramValue, index) => {
             obj[params[index]] = paramValue;
             return obj;
-        }, {} as { [key: string]: string });
-
+        }, {} as P);
         return result;
     }
 
-    goTo(store: S, paramsArr: string[]) {
-        const paramsObject = this.getParamsObject(paramsArr);
+    goTo(store: S, paramsArr: P[keyof P][]) {
+        const paramsObject = this.getParamsObject<P>(paramsArr);
         const queryParamsObject = queryString.parse(window.location.search);
         store.router.goTo(this, paramsObject, store, queryParamsObject);
     }

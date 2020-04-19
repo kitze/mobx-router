@@ -1,4 +1,7 @@
 import { observable, computed, action, toJS, runInAction } from 'mobx';
+import { Route } from '.';
+import { RouteParams } from './route';
+import { ParsedQuery } from 'query-string';
 
 export interface Store {
     router: RouterStore;
@@ -7,14 +10,19 @@ export interface Store {
 export class RouterStore {
     @observable params = {};
     @observable queryParams = {};
-    @observable currentView;
+    @observable currentView?: Route<any, any>;
 
     constructor() {
         this.goTo = this.goTo.bind(this);
     }
 
     @action
-    async goTo(view, paramsObj, store, queryParamsObj) {
+    async goTo<S extends Store, P extends RouteParams = {}, Q extends ParsedQuery = {}>(
+        view: Route<S, P>,
+        paramsObj: P,
+        store: S,
+        queryParamsObj: Q,
+    ) {
         const nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
         const pathChanged = nextPath !== this.currentPath;
 
@@ -29,12 +37,12 @@ export class RouterStore {
         const beforeExitResult =
             rootViewChanged && this.currentView && this.currentView.beforeExit
                 ? await this.currentView.beforeExit(
-                      this.currentView,
-                      currentParams,
-                      store,
-                      currentQueryParams,
-                      nextPath
-                  )
+                    this.currentView,
+                    currentParams,
+                    store,
+                    currentQueryParams,
+                    nextPath
+                )
                 : true;
         if (beforeExitResult === false) {
             return;
@@ -43,12 +51,12 @@ export class RouterStore {
         const beforeEnterResult =
             rootViewChanged && view.beforeEnter
                 ? await view.beforeEnter(
-                      view,
-                      toJS(paramsObj),
-                      store,
-                      toJS(queryParamsObj),
-                      nextPath
-                  )
+                    view,
+                    toJS(paramsObj),
+                    store,
+                    toJS(queryParamsObj),
+                    nextPath
+                )
                 : true;
         if (beforeEnterResult === false) {
             return;
