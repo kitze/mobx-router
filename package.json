@@ -11,9 +11,9 @@
     "README.md"
   ],
   "scripts": {
-    "lint": "eslint '{src,tests}/**/*.js'",
+    "lint": "eslint . --ext .ts,.tsx --ignore-path .gitignore",
     "test": "jest --env=node",
-    "build": "del-cli dist && npm run lint && babel src -d dist",
+    "build": "del-cli dist && tsc",
     "format": "prettier --print-width 80 --tab-width 4 --single-quote --write '{src,tests}/**/*.js'",
     "precommit": "lint-staged"
   },
@@ -44,6 +44,7 @@
     "react": "16.x"
   },
   "devDependencies": {
+    "@typescript-eslint/parser": "^2.28.0",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.1",
     "babel-jest": "^21.2.0",
@@ -64,7 +65,8 @@
     "prettier": "^1.7.4",
     "raf": "^3.4.0",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "typescript": "^3.8.3"
   },
   "jest": {
     "setupFiles": [

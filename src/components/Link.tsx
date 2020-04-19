@@ -13,7 +13,7 @@ const LinkBase = ({
     children,
     title = children,
     router = store.router
-}) => {
+}: any) => {
     if (!router) {
         console.error(
             'The router prop must be defined for a Link component to work!'
