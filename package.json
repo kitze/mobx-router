@@ -43,6 +43,8 @@
     "react": "16.x"
   },
   "devDependencies": {
+    "@types/enzyme": "^3.10.5",
+    "@types/jest": "^25.2.1",
     "@typescript-eslint/parser": "^2.28.0",
     "babel-jest": "^21.2.0",
     "del-cli": "^1.1.0",
@@ -58,16 +60,8 @@
     "raf": "^3.4.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "ts-jest": "^25.4.0",
     "typescript": "^3.8.3"
-  },
-  "jest": {
-    "setupFiles": [
-      "./tests/jestsetup.js"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "src"
-    ]
   },
   "lint-staged": {
     "*.js": [

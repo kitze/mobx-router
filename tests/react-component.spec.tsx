@@ -7,7 +7,7 @@ import { RouterStore } from '../src/router-store';
 
 const router = new RouterStore();
 const store = {
-    router: router
+    router
 };
 
 // eslint-disable-next-line
