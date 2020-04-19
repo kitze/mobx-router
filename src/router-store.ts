@@ -5,7 +5,7 @@ import { ParsedQuery } from 'query-string';
 
 export interface Store {
     router: RouterStore;
-};
+}
 
 export class RouterStore {
     @observable params: RouteParams = {};
