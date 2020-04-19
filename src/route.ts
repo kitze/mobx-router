@@ -29,11 +29,11 @@ export class Route<
     readonly title?: string;
 
     //lifecycle methods
-    readonly onEnter?: (route: Route<S, P>, params: P, store: S, currentQueryParams: ParsedQuery) => void;
-    readonly beforeEnter?: (route: Route<S, P>, params: P, store: S, currentQueryParams: ParsedQuery, nextPath: string) => boolean;
-    readonly beforeExit?: (route: Route<S, P>, params: P, store: S, currentQueryParams: ParsedQuery, nextPath: string) => void | false;
-    readonly onParamsChange?: (route: Route<S, P>, params: P, store: S, currentQueryParams: ParsedQuery) => void;
-    readonly onExit?: (route: Route<S, P>, params: P, store: S, currentQueryParams: ParsedQuery, nextPath: string) => void;
+    readonly onEnter?: (route: Route<S, P>, params: P | undefined, store: S, currentQueryParams: ParsedQuery | undefined) => void;
+    readonly beforeEnter?: (route: Route<S, P>, params: P | undefined, store: S, currentQueryParams: ParsedQuery | undefined, nextPath: string) => boolean;
+    readonly beforeExit?: (route: Route<S, P>, params: P | undefined, store: S, currentQueryParams: ParsedQuery | undefined, nextPath: string) => void | false;
+    readonly onParamsChange?: (route: Route<S, P>, params: P | undefined, store: S, currentQueryParams: ParsedQuery | undefined) => void;
+    readonly onExit?: (route: Route<S, P>, params: P | undefined, store: S, currentQueryParams: ParsedQuery | undefined, nextPath: string) => void;
 
     constructor({
         path,
@@ -93,8 +93,8 @@ export class Route<
    replaces url params placeholders with params from an object
    Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
    */
-    replaceUrlParams(params: P, queryParams = {}) {
-        const jsParams = toJS(params);
+    replaceUrlParams(params?: P, queryParams = {}) {
+        const jsParams = toJS<P>(params || {} as P);
         const jsQueryParams = toJS(queryParams);
 
         const queryParamsString = queryString

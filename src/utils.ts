@@ -4,7 +4,7 @@ import { Store } from "./router-store";
 export const isObject = (obj: any) =>
     obj && typeof obj === 'object' && !Array.isArray(obj);
 
-export const getObjectKeys = (obj: object) => (isObject(obj) ? Object.keys(obj) : []);
+export const getObjectKeys = (obj: any) => (isObject(obj) ? Object.keys(obj) : []);
 
 export const viewsForDirector = (views: RoutesConfig, store: Store) =>
     getObjectKeys(views).reduce((obj, viewKey) => {

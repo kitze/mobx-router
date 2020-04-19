@@ -8,7 +8,7 @@ export interface Store {
 };
 
 export class RouterStore {
-    @observable params = {};
+    @observable params: RouteParams = {};
     @observable queryParams = {};
     @observable currentView?: Route<any, any>;
 
@@ -19,9 +19,9 @@ export class RouterStore {
     @action
     async goTo<S extends Store, P extends RouteParams = {}, Q extends ParsedQuery = {}>(
         view: Route<S, P>,
-        paramsObj: P,
-        store: S,
-        queryParamsObj: Q,
+        paramsObj?: P,
+        store?: S | null,
+        queryParamsObj?: Q,
     ) {
         const nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
         const pathChanged = nextPath !== this.currentPath;
@@ -52,9 +52,9 @@ export class RouterStore {
             rootViewChanged && view.beforeEnter
                 ? await view.beforeEnter(
                     view,
-                    toJS(paramsObj),
-                    store,
-                    toJS(queryParamsObj),
+                    toJS(paramsObj || {} as P),
+                    store!, // Todo: use this.store (from constructor)
+                    toJS(queryParamsObj || {}),
                     nextPath
                 )
                 : true;
@@ -75,8 +75,8 @@ export class RouterStore {
 
         runInAction(() => {
             this.currentView = view;
-            this.params = toJS(paramsObj);
-            this.queryParams = toJS(queryParamsObj);
+            this.params = paramsObj ? toJS(paramsObj) : {};
+            this.queryParams = queryParamsObj ? toJS(queryParamsObj) : {};
         });
 
         const nextParams = toJS(paramsObj);
@@ -84,7 +84,11 @@ export class RouterStore {
 
         rootViewChanged &&
             view.onEnter &&
-            view.onEnter(view, nextParams, store, nextQueryParams);
+            view.onEnter(view,
+                nextParams,
+                store!, // Todo: use this.store (from constructor)
+                nextQueryParams,
+            );
         !rootViewChanged &&
             this.currentView &&
             this.currentView.onParamsChange &&
