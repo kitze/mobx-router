@@ -7,7 +7,7 @@ import { viewsForDirector } from './utils';
 import { RoutesConfig } from './route';
 import { Store } from './router-store';
 
-const createDirectorRouter = (views: RoutesConfig, store: Store, config = {}) => {
+const createDirectorRouter = <T extends Store>(views: RoutesConfig<T>, store: T, config = {}) => {
     new Router({
         ...viewsForDirector(views, store)
     })
@@ -18,9 +18,9 @@ const createDirectorRouter = (views: RoutesConfig, store: Store, config = {}) =>
         .init();
 };
 
-export const startRouter = (views: RoutesConfig, store: Store, config = {}) => {
+export const startRouter = <T extends Store>(views: RoutesConfig<T>, store: T, config = {}) => {
     //create director configuration
-    createDirectorRouter(views, store, config);
+    createDirectorRouter<T>(views, store, config);
 
     //autorun and watch for path changes
     autorun(() => {

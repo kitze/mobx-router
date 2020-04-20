@@ -3,7 +3,10 @@ import React from 'react';
 import { Route } from '../src/route';
 
 test('Route', () => {
-    const route = new Route({
+    const route = new Route<any, {
+        username: string,
+        tab: string,
+    }>({
         path: '/profile/:username/:tab',
         component: <div />
     });

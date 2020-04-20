@@ -1,7 +1,6 @@
 import { observable, computed, action, toJS, runInAction } from 'mobx';
 import { Route } from '.';
-import { RouteParams } from './route';
-import { ParsedQuery } from 'query-string';
+import { RouteParams, QueryParams } from './route';
 
 export interface Store {
     router: RouterStore;
@@ -9,16 +8,16 @@ export interface Store {
 
 export class RouterStore {
     @observable params: RouteParams = {};
-    @observable queryParams = {};
-    @observable currentView?: Route<any, any>;
+    @observable queryParams: QueryParams = {};
+    @observable currentView?: Route<any, any, any>;
 
     constructor() {
         this.goTo = this.goTo.bind(this);
     }
 
     @action
-    async goTo<S extends Store, P extends RouteParams = {}, Q extends ParsedQuery = {}>(
-        view: Route<S, P>,
+    async goTo<S extends Store, P extends RouteParams = {}, Q extends QueryParams = {}>(
+        view: Route<S, P, Q>,
         paramsObj?: P,
         store?: S | null,
         queryParamsObj?: Q,
@@ -54,7 +53,7 @@ export class RouterStore {
                     view,
                     toJS(paramsObj || {} as P),
                     store!, // Todo: use this.store (from constructor)
-                    toJS(queryParamsObj || {}),
+                    toJS(queryParamsObj || {} as Q),
                     nextPath
                 )
                 : true;
@@ -65,11 +64,11 @@ export class RouterStore {
         rootViewChanged &&
             this.currentView &&
             this.currentView.onExit &&
-            this.currentView.onExit(
+            (this.currentView as Route<S, P, Q>).onExit!(
                 this.currentView,
-                currentParams,
-                store,
-                currentQueryParams,
+                currentParams as P,
+                store!,
+                currentQueryParams as Q,
                 nextPath
             );
 
@@ -79,8 +78,8 @@ export class RouterStore {
             this.queryParams = queryParamsObj ? toJS(queryParamsObj) : {};
         });
 
-        const nextParams = toJS(paramsObj);
-        const nextQueryParams = toJS(queryParamsObj);
+        const nextParams = this.params as P;
+        const nextQueryParams = this.queryParams as Q;
 
         rootViewChanged &&
             view.onEnter &&
@@ -89,13 +88,14 @@ export class RouterStore {
                 store!, // Todo: use this.store (from constructor)
                 nextQueryParams,
             );
+
         !rootViewChanged &&
             this.currentView &&
             this.currentView.onParamsChange &&
-            this.currentView.onParamsChange(
+            (this.currentView as Route<S, P, Q>).onParamsChange!(
                 this.currentView,
                 nextParams,
-                store,
+                store!,
                 nextQueryParams
             );
     }

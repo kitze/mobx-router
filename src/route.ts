@@ -1,25 +1,24 @@
 import { toJS } from 'mobx';
-import queryString, { ParsedQuery } from 'query-string';
+import queryString from 'query-string';
 
 import { paramRegex, optionalRegex } from './regex';
 import { getRegexMatches } from './utils';
 import { Store } from './router-store';
 
-export type RoutesConfig = {
-    [path: string]: Route;
-};
-
-export type RouteParams = {
-    [key: string]: string;
+export type RoutesConfig<T extends Store> = {
+    [path: string]: Route<T, any, any>;
 };
 
 export type QueryParams = {
-    [key: string]: string;
+    [key: string]: string | number | undefined | boolean;
 };
 
+export type RouteParams = QueryParams;
+
 export class Route<
-    S extends Store = Store,
+    S extends Store,
     P extends RouteParams = {},
+    Q extends QueryParams = {},
     > {
     //props
     path: string;
@@ -29,11 +28,11 @@ export class Route<
     readonly title?: string;
 
     //lifecycle methods
-    readonly onEnter?: (route: Route<S, P>, params: P | undefined, store: S, currentQueryParams: ParsedQuery | undefined) => void;
-    readonly beforeEnter?: (route: Route<S, P>, params: P | undefined, store: S, currentQueryParams: ParsedQuery | undefined, nextPath: string) => boolean;
-    readonly beforeExit?: (route: Route<S, P>, params: P | undefined, store: S, currentQueryParams: ParsedQuery | undefined, nextPath: string) => void | false;
-    readonly onParamsChange?: (route: Route<S, P>, params: P | undefined, store: S, currentQueryParams: ParsedQuery | undefined) => void;
-    readonly onExit?: (route: Route<S, P>, params: P | undefined, store: S, currentQueryParams: ParsedQuery | undefined, nextPath: string) => void;
+    readonly onEnter?: (route: Route<S, P, Q>, params: P, store: S, currentQueryParams: Q) => void;
+    readonly beforeEnter?: (route: Route<S, P, Q>, params: P, store: S, currentQueryParams: Q, nextPath: string) => void | boolean | Promise<boolean>;
+    readonly beforeExit?: (route: Route<S, P, Q>, params: P, store: S, currentQueryParams: Q, nextPath: string) => void | boolean | Promise<boolean>;
+    readonly onParamsChange?: (route: Route<S, P, Q>, params: P, store: S, currentQueryParams: Q) => void;
+    readonly onExit?: (route: Route<S, P, Q>, params: P, store: S, currentQueryParams: Q, nextPath: string) => void;
 
     constructor({
         path,
@@ -47,11 +46,11 @@ export class Route<
     }: {
         path: string,
         component: JSX.Element,
-        onEnter?: Route<S, P>["onEnter"],
-        beforeExit?: Route<S, P>["beforeExit"],
-        onParamsChange?: Route<S, P>["onParamsChange"],
-        beforeEnter?: Route<S, P>["beforeEnter"];
-        onExit?: Route<S, P>["onExit"];
+        onEnter?: Route<S, P, Q>["onEnter"],
+        beforeExit?: Route<S, P, Q>["beforeExit"],
+        onParamsChange?: Route<S, P, Q>["onParamsChange"],
+        beforeEnter?: Route<S, P, Q>["beforeEnter"];
+        onExit?: Route<S, P, Q>["onExit"];
         title?: string
     }) {
 
@@ -94,7 +93,7 @@ export class Route<
    Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
    */
     replaceUrlParams(params?: P, queryParams = {}) {
-        const jsParams = toJS<P>(params || {} as P);
+        const jsParams = params && toJS<P>(params);
         const jsQueryParams = toJS(queryParams);
 
         const queryParamsString = queryString
@@ -108,10 +107,13 @@ export class Route<
             paramRegex,
             // eslint-disable-next-line
             ([_fullMatch, paramKey, paramKeyWithoutColon]) => {
-                const value = jsParams[paramKeyWithoutColon];
+                const value = jsParams
+                    ? jsParams[paramKeyWithoutColon]
+                    : undefined;
+
                 newPath =
                     value !== undefined
-                        ? newPath.replace(paramKey, value)
+                        ? newPath.replace(paramKey, value.toString())
                         : newPath.replace(`/${paramKey}`, '');
             }
         );
@@ -125,8 +127,8 @@ export class Route<
    converts an array of params [123, 100] to an object
    Example: if the current this.path is /book/:id/page/:pageId it will return {id:123, pageId:100}
    */
-    getParamsObject<P extends RouteParams>(paramValues: P[keyof P][]) {
-        const params = [] as (keyof P)[];
+    getParamsObject(paramValues: Exclude<P, undefined>[keyof Exclude<P, undefined>][]) {
+        const params = [] as (keyof Exclude<P, undefined>)[];
         getRegexMatches(
             this.originalPath,
             paramRegex,
@@ -139,13 +141,15 @@ export class Route<
         const result = paramValues.reduce((obj, paramValue, index) => {
             obj[params[index]] = paramValue;
             return obj;
-        }, {} as P);
+        }, {} as Exclude<P, undefined>);
         return result;
     }
 
-    goTo(store: S, paramsArr: P[keyof P][]) {
-        const paramsObject = this.getParamsObject<P>(paramsArr);
+    goTo(store: S, paramsArr: undefined | Exclude<P, undefined>[keyof Exclude<P, undefined>][]) {
+        const paramsObject = paramsArr
+            ? this.getParamsObject(paramsArr)
+            : undefined;
         const queryParamsObject = queryString.parse(window.location.search);
-        store.router.goTo(this, paramsObject, store, queryParamsObject);
+        store.router.goTo(this, paramsObject || {} as P, store, queryParamsObject as Q);
     }
 }
