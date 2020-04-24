@@ -25,7 +25,7 @@
 - No need to use component lifecycle methods like ```componentWillMount``` to fetch data or trigger a side effect in the store
 - Supported hooks for the routes are: ```beforeEnter```, ```onEnter```, ```beforeExit```, ```onExit```. All of the hooks receive ```route```, ```params```, ```store```, and ```queryParams``` as parameters. If the ```beforeExit``` or ```beforeEnter``` methods return ```false``` the navigation action will be prevented.
 - The current URL params and query params are accessible directly in the store ```store.router.params``` / ```store.router.queryParams``` so basically they're available everywhere without any additional wrapping or HOC.
-- Navigating to another view happens by calling the ```goTo``` method on the router store, and the changes in the url are reflected automatically. So for example you can call ```router.goTo(views.book, {id:5, page:3})``` and after the change is made in the store, the URL change will follow. You never directly manipulate the URL or the history object.
+- Navigating to another route happens by calling the ```goTo``` method on the router store, and the changes in the url are reflected automatically. So for example you can call ```router.goTo(routes.book, {id:5, page:3})``` and after the change is made in the store, the URL change will follow. You never directly manipulate the URL or the history object.
 - ```<Link>``` component which also populates the href attribute and works with middle click or ```cmd/ctrl``` + click
 - Typescript (Converted to typescript by [thdk](https://github.com/thdk))
 
@@ -35,7 +35,7 @@ import React, {createContext} from 'react';
 import ReactDOM from 'react-dom';
 
 import {MobxRouter, RouterStore, startRouter} from 'mobx-router';
-import views from 'config/views';
+import routes from 'config/routes';
 
 //example mobx store
 export class AppStore {
@@ -59,7 +59,7 @@ const store = new RootStore();
 const StoreContext = createContext({});
 const StoreProvider = StoreContext.Provider;
 
-startRouter(views, store);
+startRouter(routes, store);
 
 ReactDOM.render(
   <StoreProvider value={store}>
@@ -70,7 +70,7 @@ ReactDOM.render(
 
 ### Example config
 
-/config/views.js
+/config/routes.js
 
 ```js
 import React from 'react';
@@ -85,7 +85,7 @@ import Gallery from 'components/Gallery';
 import Book from 'components/Book';
 import UserProfile from 'components/UserProfile';
 
-const views = {
+const routes = {
   home: new Route({
     path: '/',
     component: <Home/>
@@ -138,5 +138,5 @@ const views = {
     }
   })
 };
-export default views;
+export default routes;
 ```

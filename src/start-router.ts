@@ -18,9 +18,9 @@ const createDirectorRouter = <T extends Store>(views: RoutesConfig<T>, store: T,
         .init();
 };
 
-export const startRouter = <T extends Store>(views: RoutesConfig<T>, store: T, config = {}) => {
+export const startRouter = <T extends Store>(routes: RoutesConfig<T>, store: T, config = {}) => {
     //create director configuration
-    createDirectorRouter<T>(views, store, config);
+    createDirectorRouter<T>(routes, store, config);
 
     //autorun and watch for path changes
     autorun(() => {
