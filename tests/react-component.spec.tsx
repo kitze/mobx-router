@@ -2,18 +2,15 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Route } from '../src/route';
-import { RouterStore } from '../src/router-store';
 import { render, fireEvent, waitFor } from '@testing-library/react';
+import { RootStore } from './mocks/store';
 
-const router = new RouterStore();
-const store = {
-    router
-};
+const rootStore = new RootStore();
+const { router } = rootStore;
 
 // eslint-disable-next-line
 const UserProfile = observer(() => {
-    const { router } = store;
-
+    const { params } = router;
     return (
         <div>
             <button
@@ -34,14 +31,14 @@ const UserProfile = observer(() => {
                 Tab 2
             </button>
 
-            {router.params.tab === 'tab1' && <div id="tab">Tab 1 Content</div>}
-            {router.params.tab === 'tab2' && <div id="tab">Tab 2 Content</div>}
+            {params && params.tab === 'tab1' && <div id="tab">Tab 1 Content</div>}
+            {params && params.tab === 'tab2' && <div id="tab">Tab 2 Content</div>}
         </div>
     );
 });
 
 const routes = {
-    profile: new Route<typeof store, { username: string, tab: string }>({
+    profile: new Route<RootStore, { username: string, tab: string }>({
         path: '/profile/:username/:tab',
         component: <UserProfile />
     })

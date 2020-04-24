@@ -9,7 +9,7 @@ export const getObjectKeys = (obj: any) => (isObject(obj) ? Object.keys(obj) : [
 export const viewsForDirector = <T extends Store>(views: RoutesConfig<T>, store: T) =>
     getObjectKeys(views).reduce((obj, viewKey) => {
         const view = views[viewKey];
-        obj[view.path] = (...paramsArr) => view.goTo(store, paramsArr as any);
+        obj[view.path] = (...paramsArr) => store.router.goTo(view as any, paramsArr as any);
         return obj;
     }, {} as { [path: string]: (...paramsArr: string[]) => any });
 

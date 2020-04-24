@@ -6,20 +6,21 @@ export interface Store {
     router: RouterStore;
 }
 
-export class RouterStore {
+export class RouterStore<S extends Store = Store> {
     @observable params: RouteParams = {};
     @observable queryParams: QueryParams = {};
-    @observable currentView?: Route<any, any, any>;
+    @observable currentView?: Route<S, any, any>;
 
-    constructor() {
-        this.goTo = this.goTo.bind(this);
+    readonly store: S;
+
+    constructor(store: S) {
+        this.store = store;
     }
 
     @action
-    async goTo<S extends Store, P extends RouteParams = {}, Q extends QueryParams = {}>(
+    async goTo<P extends RouteParams = {}, Q extends QueryParams = {}>(
         view: Route<S, P, Q>,
         paramsObj?: P,
-        store?: S | null,
         queryParamsObj?: Q,
     ) {
         const nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
@@ -38,7 +39,7 @@ export class RouterStore {
                 ? await this.currentView.beforeExit(
                     this.currentView,
                     currentParams,
-                    store,
+                    this.store,
                     currentQueryParams,
                     nextPath
                 )
@@ -52,7 +53,7 @@ export class RouterStore {
                 ? await view.beforeEnter(
                     view,
                     toJS(paramsObj || {} as P),
-                    store!, // Todo: use this.store (from constructor)
+                    this.store,
                     toJS(queryParamsObj || {} as Q),
                     nextPath
                 )
@@ -67,15 +68,15 @@ export class RouterStore {
             (this.currentView as Route<S, P, Q>).onExit!(
                 this.currentView,
                 currentParams as P,
-                store!,
+                this.store,
                 currentQueryParams as Q,
                 nextPath
             );
 
         runInAction(() => {
             this.currentView = view;
-            this.params = paramsObj ? toJS(paramsObj) : {};
-            this.queryParams = queryParamsObj ? toJS(queryParamsObj) : {};
+            this.params = toJS(paramsObj) as P;
+            this.queryParams = toJS(queryParamsObj) as Q;
         });
 
         const nextParams = toJS(this.params as P);
@@ -85,17 +86,17 @@ export class RouterStore {
             view.onEnter &&
             view.onEnter(view,
                 nextParams,
-                store!, // Todo: use this.store (from constructor)
+                this.store,
                 nextQueryParams,
             );
 
         !rootViewChanged &&
             this.currentView &&
             this.currentView.onParamsChange &&
-            (this.currentView as Route<S, P, Q>).onParamsChange!(
+            this.currentView.onParamsChange(
                 this.currentView,
                 nextParams,
-                store!,
+                this.store,
                 nextQueryParams
             );
     }

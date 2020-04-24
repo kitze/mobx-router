@@ -22,8 +22,8 @@ export const routes = {
         username: string,
         tab?: string,
     }, {
-        id?: string,
-    }>({
+        id: string,
+    } | undefined>({
         path: '/profile/:username/:tab',
         component: <div />,
         onEnter: (route, params) => {

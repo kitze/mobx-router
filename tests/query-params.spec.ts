@@ -1,14 +1,16 @@
-import { RouterStore } from '../src/router-store';
 import { routes } from './mocks/routes';
 import { mocks } from './mocks/mocks';
+import { RootStore } from './mocks/store';
+
+const rootStore = new RootStore();
 
 test('Router Scenario', () => {
-    const router = new RouterStore();
+    const { router } = rootStore;
     router.currentView = routes.home;
 
     expect(router.currentPath).toBe('/');
 
-    router.goTo(routes.profile, { username: 'kitze' }, null, { id: "123" });
+    router.goTo(routes.profile, { username: 'kitze' }, { id: "123" });
 
     expect(mocks.exitingHome).toBeCalled();
     expect(router.currentPath).toBe('/profile/kitze?id=123');
@@ -21,7 +23,7 @@ test('Router Scenario', () => {
     expect(mocks.enteringProfile).toHaveBeenCalledTimes(1);
     expect(mocks.changingParamsProfile).lastCalledWith(
         { username: 'kristijan' },
-        {},
+        undefined,
     );
     expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(1);
 
@@ -31,7 +33,7 @@ test('Router Scenario', () => {
     expect(mocks.enteringProfile).toHaveBeenCalledTimes(1);
     expect(mocks.changingParamsProfile).lastCalledWith(
         { tab: 'about', username: 'kristijan' },
-        {},
+        undefined,
     );
     expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(2);
 
@@ -53,7 +55,7 @@ test('Router Scenario', () => {
     expect(router.currentPath).toBe('/profile/kristijan/about');
     expect(mocks.changingParamsProfile).lastCalledWith(
         { tab: 'about', username: 'kristijan' },
-        {},
+        undefined,
     );
     expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(2);
 
@@ -62,11 +64,11 @@ test('Router Scenario', () => {
     expect(router.currentPath).toBe('/profile/kristijan/about');
     expect(mocks.changingParamsProfile).lastCalledWith(
         { tab: 'about', username: 'kristijan' },
-        {},
+        undefined,
     );
     expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(2);
 
-    router.goTo(routes.profile, { username: 'kristijan', tab: 'about' }, null, {
+    router.goTo(routes.profile, { username: 'kristijan', tab: 'about' }, {
         id: "123"
     });
 
@@ -82,7 +84,7 @@ test('Router Scenario', () => {
     expect(router.currentPath).toBe('/profile/kristijan/about');
     expect(mocks.changingParamsProfile).lastCalledWith(
         { tab: 'about', username: 'kristijan' },
-        {},
+        undefined,
     );
     expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(4);
 });

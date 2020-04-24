@@ -1,9 +1,10 @@
-import { RouterStore } from '../src/router-store';
 import { routes } from './mocks/routes';
 import { mocks } from './mocks/mocks';
+import { RootStore } from './mocks/store';
 
 test('Router Scenario', () => {
-    const router = new RouterStore();
+    const rootStore = new RootStore();
+    const { router } = rootStore;
     router.currentView = routes.home;
 
     expect(router.currentPath).toBe('/');
@@ -21,7 +22,7 @@ test('Router Scenario', () => {
     expect(mocks.enteringProfile).toHaveBeenCalledTimes(1);
     expect(mocks.changingParamsProfile).lastCalledWith(
         { username: 'kristijan' },
-        {},
+        undefined,
     );
     expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(1);
 
@@ -31,7 +32,7 @@ test('Router Scenario', () => {
     expect(mocks.enteringProfile).toHaveBeenCalledTimes(1);
     expect(mocks.changingParamsProfile).lastCalledWith(
         { tab: 'about', username: 'kristijan' },
-        {},
+        undefined,
     );
     expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(2);
 
