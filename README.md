@@ -13,6 +13,7 @@
 ### Example usage
 * [Demo project](http://mobx-router-example.netlify.com/)
 * [Demo project repo](https://github.com/kitze/mobx-router-example)
+* [Demo project repo with typescript](https://github.com/thdk/mobx-router-typescript-example)
 
 ## Inspiration
 [📖 How to decouple state and UI - a.k.a. you don’t need componentWillMount](https://medium.com/@mweststrate/how-to-decouple-state-and-ui-a-k-a-you-dont-need-componentwillmount-cc90b787aa37#.k9tvf5nga)
@@ -26,6 +27,7 @@
 - The current URL params and query params are accessible directly in the store ```store.router.params``` / ```store.router.queryParams``` so basically they're available everywhere without any additional wrapping or HOC.
 - Navigating to another view happens by calling the ```goTo``` method on the router store, and the changes in the url are reflected automatically. So for example you can call ```router.goTo(views.book, {id:5, page:3})``` and after the change is made in the store, the URL change will follow. You never directly manipulate the URL or the history object.
 - ```<Link>``` component which also populates the href attribute and works with middle click or ```cmd/ctrl``` + click
+- Typescript (Converted to typescript by [thdk](https://github.com/thdk))
 
 ### Implementation
 ```js
