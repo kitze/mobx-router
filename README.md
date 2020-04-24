@@ -52,7 +52,7 @@ const StoreProvider = StoreContext.Provider;
 startRouter(views, store);
 
 ReactDOM.render(
-  <StoreProvider store={store}>
+  <StoreProvider value={store}>
   	<MobxRouter store={store}/>
   </StoreProvider>, document.getElementById('root')
 )
