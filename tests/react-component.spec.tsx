@@ -47,7 +47,7 @@ const routes = {
     })
 };
 
-test('UserProfile changes tabs when a tab button is clicked', async () => {
+test('UserProfile changes tabs when a tab button is clicked', async() => {
     // Set up router state to point to profile page and tab 1
     router.goTo(routes.profile, { username: 'john', tab: 'tab1' });
 
