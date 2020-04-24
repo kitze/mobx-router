@@ -38,14 +38,22 @@ import {MobxRouter, RouterStore, startRouter} from 'mobx-router';
 import views from 'config/views';
 
 //example mobx store
-const store = {
-	app: {
-		title: 'MobX Router Example App',
-		user: null
-	},
-	//here's how we can plug the routerStore into our store
-	router: new RouterStore()
-};
+export class AppStore {
+    title = 'MobX Router Example App',
+    user = null
+}
+
+export class RootStore {
+    public router: RouterStore<RootStore>;
+    public app: AppStore;
+
+    constructor() {
+        this.router = new RouterStore<RootStore>(this);
+        this.app = new AppStore();
+    }
+}
+
+const store = new RootStore();
 
 // Use React context to make your store available in your application
 const StoreContext = createContext({});

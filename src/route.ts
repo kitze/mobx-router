@@ -11,7 +11,7 @@ export type RoutesConfig<T extends Store> = {
 
 export type QueryParams = {
     [key: string]: string | number | undefined | boolean;
-};
+} | undefined;
 
 export type RouteParams = QueryParams;
 
@@ -73,11 +73,6 @@ export class Route<
 
         this.rootPath = this.getRootPath();
 
-        //bind
-        this.getRootPath = this.getRootPath.bind(this);
-        this.replaceUrlParams = this.replaceUrlParams.bind(this);
-        this.getParamsObject = this.getParamsObject.bind(this);
-        this.goTo = this.goTo.bind(this);
     }
 
     /*
@@ -143,13 +138,5 @@ export class Route<
             return obj;
         }, {} as Exclude<P, undefined>);
         return result;
-    }
-
-    goTo(store: S, paramsArr: undefined | Exclude<P, undefined>[keyof Exclude<P, undefined>][]) {
-        const paramsObject = paramsArr
-            ? this.getParamsObject(paramsArr)
-            : undefined;
-        const queryParamsObject = queryString.parse(window.location.search);
-        store.router.goTo(this, paramsObject || {} as P, store, queryParamsObject as Q);
     }
 }
