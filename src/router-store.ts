@@ -78,8 +78,8 @@ export class RouterStore {
             this.queryParams = queryParamsObj ? toJS(queryParamsObj) : {};
         });
 
-        const nextParams = this.params as P;
-        const nextQueryParams = this.queryParams as Q;
+        const nextParams = toJS(this.params as P);
+        const nextQueryParams = toJS(this.queryParams as Q);
 
         rootViewChanged &&
             view.onEnter &&

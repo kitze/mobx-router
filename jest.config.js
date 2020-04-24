@@ -4,6 +4,6 @@ module.exports = {
     },
     testRegex: '((\\.|/)spec)\\.tsx?$',
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-    setupFiles: ['./tests/jestsetup.ts'],
+    setupFilesAfterEnv: ['./jest.setup.ts'],
     moduleDirectories: ['node_modules', 'src']
 };
