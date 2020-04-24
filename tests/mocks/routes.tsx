@@ -2,6 +2,7 @@
 import React from 'react';
 import { Route } from '../../src/route';
 import { mocks } from './mocks';
+import { Store } from '../../src';
 
 export const routes = {
     home: new Route({
@@ -17,7 +18,12 @@ export const routes = {
             mocks.changingParamsHome();
         }
     }),
-    profile: new Route({
+    profile: new Route<Store, {
+        username: string,
+        tab?: string,
+    }, {
+        id?: string,
+    }>({
         path: '/profile/:username/:tab',
         component: <div />,
         onEnter: (route, params) => {

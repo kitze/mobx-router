@@ -5,8 +5,9 @@ module.exports = {
         node: true,
         jest: true
     },
+    plugins: ['@typescript-eslint'],
     globals: {},
-    parser: 'babel-eslint',
+    parser: '@typescript-eslint/parser',
     parserOptions: {
         ecmaVersion: 6,
         ecmaFeatures: {
@@ -40,6 +41,8 @@ module.exports = {
         'semi-spacing': 'error',
         'space-before-blocks': 'error',
         'space-before-function-paren': ['error', 'never'],
-        'space-in-parens': 'error'
+        'space-in-parens': 'error',
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': ['error']
     }
 };

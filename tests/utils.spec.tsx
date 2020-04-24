@@ -8,6 +8,7 @@ import {
 } from '../src/utils';
 import { paramRegex } from '../src/regex';
 import { Route } from '../src/route';
+import { Store } from '../src/router-store';
 
 test('viewsForDirector', () => {
     const views = {
@@ -25,7 +26,7 @@ test('viewsForDirector', () => {
         })
     };
 
-    const result = viewsForDirector(views, {});
+    const result = viewsForDirector(views, {} as Store);
     const keys = Object.keys(result);
     const values = keys.map(k => result[k]);
 
@@ -52,28 +53,28 @@ test('getObjectKeys', () => {
 });
 
 test('getRegexMatches', () => {
-    const paramsArray = [];
+    const paramsArray = [] as string[];
     const path = '/profile/user/:username/:tab?';
 
     getRegexMatches(path, paramRegex, match => {
         paramsArray.push(match[2]);
     });
 
-    const paramsArray2 = [];
+    const paramsArray2 = [] as string[];
     const path2 = '/profile';
 
     getRegexMatches(path2, paramRegex, match => {
         paramsArray2.push(match[2]);
     });
 
-    const paramsArray3 = [];
+    const paramsArray3 = [] as string[];
     const path3 = '/profile/:username';
 
     getRegexMatches(path3, paramRegex, ([, , third]) => {
         paramsArray3.push(third);
     });
 
-    const paramsArray4 = [];
+    const paramsArray4 = [] as string[];
 
     getRegexMatches(path, paramRegex, ([, second]) => {
         paramsArray4.push(second);

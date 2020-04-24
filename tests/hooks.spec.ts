@@ -21,7 +21,7 @@ test('Router Scenario', () => {
     expect(mocks.enteringProfile).toHaveBeenCalledTimes(1);
     expect(mocks.changingParamsProfile).lastCalledWith(
         { username: 'kristijan' },
-        undefined
+        {},
     );
     expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(1);
 
@@ -31,7 +31,7 @@ test('Router Scenario', () => {
     expect(mocks.enteringProfile).toHaveBeenCalledTimes(1);
     expect(mocks.changingParamsProfile).lastCalledWith(
         { tab: 'about', username: 'kristijan' },
-        undefined
+        {},
     );
     expect(mocks.changingParamsProfile).toHaveBeenCalledTimes(2);
 
