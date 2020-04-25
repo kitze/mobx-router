@@ -3,10 +3,10 @@ import { Route } from '.';
 import { RouteParams, QueryParams } from './route';
 
 export interface Store {
-    router: RouterStore;
+    router: RouterStore<Store>;
 }
 
-export class RouterStore<S extends Store = Store> {
+export class RouterStore<S extends Store> {
     @observable params: RouteParams = {};
     @observable queryParams: QueryParams = {};
     @observable currentView?: Route<S, any, any>;
