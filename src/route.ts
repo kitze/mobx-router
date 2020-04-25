@@ -73,6 +73,10 @@ export class Route<
 
         this.rootPath = this.getRootPath();
 
+        //bind
+        this.getRootPath = this.getRootPath.bind(this);
+        this.replaceUrlParams = this.replaceUrlParams.bind(this);
+        this.getParamsObject = this.getParamsObject.bind(this);
     }
 
     /*

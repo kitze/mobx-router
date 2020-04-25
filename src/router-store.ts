@@ -2,8 +2,8 @@ import { observable, computed, action, toJS, runInAction } from 'mobx';
 import { Route } from '.';
 import { RouteParams, QueryParams } from './route';
 
-export interface Store {
-    router: RouterStore<Store>;
+export type Store = {
+    router: RouterStore<any>;
 }
 
 export class RouterStore<S extends Store> {
@@ -15,6 +15,9 @@ export class RouterStore<S extends Store> {
 
     constructor(store: S) {
         this.store = store;
+
+        //bind
+        this.goTo = this.goTo.bind(this);
     }
 
     @action
