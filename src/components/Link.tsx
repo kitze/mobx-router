@@ -1,19 +1,29 @@
 // eslint-disable-next-line
 import React from 'react';
 import { observer } from 'mobx-react-lite';
+import { Route, RouteParams, QueryParams } from '../route';
+import { Store, RouterStore } from '../router-store';
 
-const LinkBase = ({
-    view,
+const LinkBase = <S extends Store, P extends RouteParams, Q extends QueryParams>({
+    route,
     className,
-    params = {},
-    queryParams = {},
-    store = {},
+    params,
+    queryParams,
     refresh = false,
     style = {},
     children,
-    title = children,
-    router = store.router
-}: any) => {
+    title,
+    router,
+}: React.PropsWithChildren<{
+    route: Route<S, P, Q>,
+    className?: string,
+    params: P,
+    queryParams: Q,
+    refresh: boolean,
+    style: React.StyleHTMLAttributes<HTMLAnchorElement>,
+    title?: string,
+    router: RouterStore<S>,
+}>) => {
     if (!router) {
         console.error(
             'The router prop must be defined for a Link component to work!'
@@ -33,12 +43,12 @@ const LinkBase = ({
 
                 if (!shouldNavigateManually) {
                     e.preventDefault();
-                    router.goTo(view, params, store, queryParams);
+                    router.goTo(route, params, queryParams);
                 }
             }}
-            href={view.replaceUrlParams(params, queryParams)}
+            href={route.replaceUrlParams(params, queryParams)}
         >
-            {title}
+            {title || children}
         </a>
     );
 };
