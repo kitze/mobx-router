@@ -17,10 +17,10 @@ const LinkBase = <S extends Store, P extends RouteParams, Q extends QueryParams>
 }: React.PropsWithChildren<{
     route: Route<S, P, Q>,
     className?: string,
-    params: P,
-    queryParams: Q,
-    refresh: boolean,
-    style: React.StyleHTMLAttributes<HTMLAnchorElement>,
+    params?: P,
+    queryParams?: Q,
+    refresh?: boolean,
+    style?: React.StyleHTMLAttributes<HTMLAnchorElement>,
     title?: string,
     router: RouterStore<S>,
 }>) => {
