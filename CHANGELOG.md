@@ -1,6 +1,6 @@
 # Changelog for mobx-router
 
-## 0.2.7 (unreleased)
+## 0.2.7 (2020-04-26)
 
 Breaking changes:
   - RouterStore requires mobx store to be passed into its constructor. -> 4aab7a92146e3798f74c23848bd2085dc19d1ce5
