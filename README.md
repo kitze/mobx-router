@@ -20,14 +20,14 @@
 
 ## Features
 - Decoupled state from UI
-- Central route configuration in one file
+- Central route configuration
 - URL changes are triggering changes directly in the store, and vice-versa
-- No need to use component lifecycle methods like ```componentWillMount``` to fetch data or trigger a side effect in the store
-- Supported hooks for the routes are: ```beforeEnter```, ```onEnter```, ```beforeExit```, ```onExit```. All of the hooks receive ```route```, ```params```, ```store```, and ```queryParams``` as parameters. If the ```beforeExit``` or ```beforeEnter``` methods return ```false``` the navigation action will be prevented.
-- The current URL params and query params are accessible directly in the store ```store.router.params``` / ```store.router.queryParams``` so basically they're available everywhere without any additional wrapping or HOC.
-- Navigating to another route happens by calling the ```goTo``` method on the router store, and the changes in the url are reflected automatically. So for example you can call ```router.goTo(routes.book, {id:5, page:3})``` and after the change is made in the store, the URL change will follow. You never directly manipulate the URL or the history object.
-- ```<Link>``` component which also populates the href attribute and works with middle click or ```cmd/ctrl``` + click
-- Typescript (Converted to typescript by [thdk](https://github.com/thdk))
+- No need to use component lifecycle methods like `componentWillMount` to fetch data or trigger a side effect in the store
+- Supported callbacks for the routes are: `beforeEnter`, `onEnter`, `beforeExit`, `onExit`. All of the callbacks receive `route`, `params`, `store`, and `queryParams` as parameters. If the `beforeExit` or `beforeEnter` methods return `false` the navigation action will be prevented.
+- The current URL params and query params are accessible directly in the store `store.router.params` / `store.router.queryParams` so basically they're available everywhere without any additional wrapping or HOC.
+- Navigating to another route happens by calling the `goTo` method on the router store, and the changes in the url are reflected automatically. So for example you can call `router.goTo(routes.book, {id:5, page:3})` and after the change is made in the store, the URL change will follow. You never directly manipulate the URL or the history object.
+- `<Link>` component which also populates the href attribute and works with `middle click` or `cmd/ctrl + click`
+- Typescript support (Converted to typescript by [thdk](https://github.com/thdk))
 
 ### Implementation
 ```js
