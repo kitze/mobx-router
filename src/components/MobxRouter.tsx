@@ -9,9 +9,9 @@ export const MobxRouter = observer(({ store: { router } }: Props) => {
     return (
         <>
             {
-                router.currentView && router.currentView.component
+                router.currentRoute && router.currentRoute.component
                     ? (
-                        router.currentView.component
+                        router.currentRoute.component
                     )
                     : (
                         <div />

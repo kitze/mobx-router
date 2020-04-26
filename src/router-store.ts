@@ -9,7 +9,7 @@ export type Store = {
 export class RouterStore<S extends Store> {
     @observable params: RouteParams = {};
     @observable queryParams: QueryParams = {};
-    @observable currentView?: Route<S, any, any>;
+    @observable currentRoute?: Route<S, any, any>;
 
     readonly store: S;
 
@@ -22,25 +22,25 @@ export class RouterStore<S extends Store> {
 
     @action
     async goTo<P extends RouteParams = {}, Q extends QueryParams = {}>(
-        view: Route<S, P, Q>,
+        route: Route<S, P, Q>,
         paramsObj?: P,
         queryParamsObj?: Q,
     ) {
-        const nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
+        const nextPath = route.replaceUrlParams(paramsObj, queryParamsObj);
         const pathChanged = nextPath !== this.currentPath;
 
         if (!pathChanged) {
             return;
         }
 
-        const rootViewChanged = !this.currentView || this.currentView !== view;
+        const routeChanged = !this.currentRoute || this.currentRoute !== route;
         const currentParams = toJS(this.params);
         const currentQueryParams = toJS(this.queryParams);
 
         const beforeExitResult =
-            rootViewChanged && this.currentView && this.currentView.beforeExit
-                ? await this.currentView.beforeExit(
-                    this.currentView,
+            routeChanged && this.currentRoute && this.currentRoute.beforeExit
+                ? await this.currentRoute.beforeExit(
+                    this.currentRoute,
                     currentParams,
                     this.store,
                     currentQueryParams,
@@ -52,9 +52,9 @@ export class RouterStore<S extends Store> {
         }
 
         const beforeEnterResult =
-            rootViewChanged && view.beforeEnter
-                ? await view.beforeEnter(
-                    view,
+            routeChanged && route.beforeEnter
+                ? await route.beforeEnter(
+                    route,
                     toJS(paramsObj || {} as P),
                     this.store,
                     toJS(queryParamsObj || {} as Q),
@@ -65,11 +65,11 @@ export class RouterStore<S extends Store> {
             return;
         }
 
-        rootViewChanged &&
-            this.currentView &&
-            this.currentView.onExit &&
-            (this.currentView as Route<S, P, Q>).onExit!(
-                this.currentView,
+        routeChanged &&
+            this.currentRoute &&
+            this.currentRoute.onExit &&
+            (this.currentRoute as Route<S, P, Q>).onExit!(
+                this.currentRoute,
                 currentParams as P,
                 this.store,
                 currentQueryParams as Q,
@@ -77,7 +77,7 @@ export class RouterStore<S extends Store> {
             );
 
         runInAction(() => {
-            this.currentView = view;
+            this.currentRoute = route;
             this.params = toJS(paramsObj) as P;
             this.queryParams = toJS(queryParamsObj) as Q;
         });
@@ -85,19 +85,19 @@ export class RouterStore<S extends Store> {
         const nextParams = toJS(this.params as P);
         const nextQueryParams = toJS(this.queryParams as Q);
 
-        rootViewChanged &&
-            view.onEnter &&
-            view.onEnter(view,
+        routeChanged &&
+            route.onEnter &&
+            route.onEnter(route,
                 nextParams,
                 this.store,
                 nextQueryParams,
             );
 
-        !rootViewChanged &&
-            this.currentView &&
-            this.currentView.onParamsChange &&
-            this.currentView.onParamsChange(
-                this.currentView,
+        !routeChanged &&
+            this.currentRoute &&
+            this.currentRoute.onParamsChange &&
+            this.currentRoute.onParamsChange(
+                this.currentRoute,
                 nextParams,
                 this.store,
                 nextQueryParams
@@ -106,8 +106,8 @@ export class RouterStore<S extends Store> {
 
     @computed
     get currentPath() {
-        return this.currentView
-            ? this.currentView.replaceUrlParams(this.params, this.queryParams)
+        return this.currentRoute
+            ? this.currentRoute.replaceUrlParams(this.params, this.queryParams)
             : '';
     }
 }

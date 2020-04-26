@@ -6,7 +6,7 @@ const rootStore = new RootStore();
 
 test('Router Scenario', () => {
     const { router } = rootStore;
-    router.currentView = routes.home;
+    router.currentRoute = routes.home;
 
     expect(router.currentPath).toBe('/');
 

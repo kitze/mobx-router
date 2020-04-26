@@ -5,7 +5,7 @@ import { RootStore } from './mocks/store';
 test('Router Scenario', () => {
     const rootStore = new RootStore();
     const { router } = rootStore;
-    router.currentView = routes.home;
+    router.currentRoute = routes.home;
 
     expect(router.currentPath).toBe('/');
 
