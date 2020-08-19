@@ -28,6 +28,7 @@
 - Navigating to another route happens by calling the `goTo` method on the router store, and the changes in the url are reflected automatically. So for example you can call `router.goTo(routes.book, {id:5, page:3})` and after the change is made in the store, the URL change will follow. You never directly manipulate the URL or the history object.
 - `<Link>` component which also populates the href attribute and works with `middle click` or `cmd/ctrl + click`
 - Typescript support (Converted to typescript by [thdk](https://github.com/thdk))
+- Hash-based routing (using paths like `/#/foo/bar`) support
 
 ### Implementation
 ```js
@@ -139,4 +140,12 @@ const routes = {
   })
 };
 export default routes;
+```
+
+### Hash-based routing
+Just add option for `startRouter` (no need to include `#` in route paths).
+```js
+startRouter(routes, store, {
+  html5history: false
+});
 ```
