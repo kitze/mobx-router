@@ -1,5 +1,9 @@
 # Changelog for mobx-router
 
+## 0.2.8 (2020-08-21)
+
+Add support for hash based routing. #98
+
 ## 0.2.7 (2020-04-26)
 
 Breaking changes:

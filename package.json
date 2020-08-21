@@ -1,6 +1,6 @@
 {
   "name": "mobx-router",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "A simple router for MobX",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
@@ -37,7 +37,7 @@
   "homepage": "https://github.com/kitze/mobx-router#readme",
   "dependencies": {
     "director": "1.2.8",
-    "query-string": "^6.12.1"
+    "query-string": "^6.13.1"
   },
   "peerDependencies": {
     "mobx": "^5.x",
