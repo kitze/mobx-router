@@ -3,17 +3,14 @@ import { Router } from 'director/build/director';
 
 import { autorun } from 'mobx';
 
-import { viewsForDirector } from './utils';
+import { viewsForDirector, DirectorConfig } from './utils';
 import { RoutesConfig } from './route';
 import { Store } from './router-store';
 
-interface DirectorConfig {
-    html5history?: boolean
-}
 
 const createDirectorRouter = <T extends Store>(views: RoutesConfig<T>, store: T, config: DirectorConfig = {}) => {
     new Router({
-        ...viewsForDirector(views, store)
+        ...viewsForDirector(views, store, config)
     })
         .configure({
             html5history: true,
