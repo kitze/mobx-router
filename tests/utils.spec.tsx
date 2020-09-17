@@ -4,7 +4,8 @@ import {
     viewsForDirector,
     isObject,
     getObjectKeys,
-    getRegexMatches
+    getRegexMatches,
+    DirectorConfig
 } from '../src/utils';
 import { paramRegex } from '../src/regex';
 import { Route } from '../src/route';
@@ -26,7 +27,7 @@ test('viewsForDirector', () => {
         })
     };
 
-    const result = viewsForDirector(views, {} as Store);
+    const result = viewsForDirector(views, {} as Store, {} as DirectorConfig);
     const keys = Object.keys(result);
     const values = keys.map(k => result[k]);
 
