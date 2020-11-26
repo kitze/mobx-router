@@ -1,6 +1,6 @@
 {
   "name": "mobx-router",
-  "version": "0.2.9",
+  "version": "0.2.11",
   "description": "A simple router for MobX",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
