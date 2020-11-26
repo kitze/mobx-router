@@ -144,7 +144,7 @@ export default routes;
 
 ### Custom director configuration
 
-*mobx-router* uses [director](https://github.com/flatiron/director) behind the screens. mobx-router exposes the director config object for you to pass your own configuration to director.
+*mobx-router* uses [director](https://github.com/flatiron/director) behind the scenes. mobx-router exposes the director config object for you to pass your own configuration to director.
 
 To do this you must pass a `DirectorConfig` object as third argument of `startRouter` method.
 
