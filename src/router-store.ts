@@ -4,7 +4,7 @@ import { RouteParams, QueryParams } from './route';
 
 export type Store = {
     router: RouterStore<any>;
-}
+};
 
 export class RouterStore<S extends Store> {
     @observable params: RouteParams = {};
@@ -24,7 +24,7 @@ export class RouterStore<S extends Store> {
     async goTo<P extends RouteParams = {}, Q extends QueryParams = {}>(
         route: Route<S, P, Q>,
         paramsObj?: P,
-        queryParamsObj?: Q,
+        queryParamsObj?: Q
     ) {
         const nextPath = route.replaceUrlParams(paramsObj, queryParamsObj);
         const pathChanged = nextPath !== this.currentPath;
@@ -40,12 +40,12 @@ export class RouterStore<S extends Store> {
         const beforeExitResult =
             routeChanged && this.currentRoute && this.currentRoute.beforeExit
                 ? await this.currentRoute.beforeExit(
-                    this.currentRoute,
-                    currentParams,
-                    this.store,
-                    currentQueryParams,
-                    nextPath
-                )
+                      this.currentRoute,
+                      currentParams,
+                      this.store,
+                      currentQueryParams,
+                      nextPath
+                  )
                 : true;
         if (beforeExitResult === false) {
             return;
@@ -54,12 +54,12 @@ export class RouterStore<S extends Store> {
         const beforeEnterResult =
             routeChanged && route.beforeEnter
                 ? await route.beforeEnter(
-                    route,
-                    toJS(paramsObj || {} as P),
-                    this.store,
-                    toJS(queryParamsObj || {} as Q),
-                    nextPath
-                )
+                      route,
+                      toJS(paramsObj || ({} as P)),
+                      this.store,
+                      toJS(queryParamsObj || ({} as Q)),
+                      nextPath
+                  )
                 : true;
         if (beforeEnterResult === false) {
             return;
@@ -87,11 +87,7 @@ export class RouterStore<S extends Store> {
 
         routeChanged &&
             route.onEnter &&
-            route.onEnter(route,
-                nextParams,
-                this.store,
-                nextQueryParams,
-            );
+            route.onEnter(route, nextParams, this.store, nextQueryParams);
 
         !routeChanged &&
             this.currentRoute &&

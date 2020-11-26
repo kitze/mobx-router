@@ -1,4 +1,4 @@
-import { RouterStore } from "../../src/router-store";
+import { RouterStore } from '../../src/router-store';
 
 export class RootStore {
     public router: RouterStore<RootStore>;

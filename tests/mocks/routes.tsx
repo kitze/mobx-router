@@ -18,12 +18,17 @@ export const routes = {
             mocks.changingParamsHome();
         }
     }),
-    profile: new Route<Store, {
-        username: string,
-        tab?: string,
-    }, {
-        id: string,
-    } | undefined>({
+    profile: new Route<
+        Store,
+        {
+            username: string;
+            tab?: string;
+        },
+        | {
+              id: string;
+          }
+        | undefined
+    >({
         path: '/profile/:username/:tab',
         component: <div />,
         onEnter: (route, params) => {

@@ -9,17 +9,19 @@ export type RoutesConfig<T extends Store> = {
     [path: string]: Route<T, any, any>;
 };
 
-export type QueryParams = {
-    [key: string]: string | number | undefined | boolean;
-} | undefined;
+export type QueryParams =
+    | {
+          [key: string]: string | number | undefined | boolean;
+      }
+    | undefined;
 
 export type RouteParams = QueryParams;
 
 export class Route<
     S extends Store,
     P extends RouteParams = {},
-    Q extends QueryParams = {},
-    > {
+    Q extends QueryParams = {}
+> {
     //props
     path: string;
     readonly originalPath: string;
@@ -28,11 +30,39 @@ export class Route<
     readonly title?: string;
 
     //lifecycle methods
-    readonly onEnter?: (route: Route<S, P, Q>, params: P, store: S, currentQueryParams: Q) => void;
-    readonly beforeEnter?: (route: Route<S, P, Q>, params: P, store: S, currentQueryParams: Q, nextPath: string) => void | boolean | Promise<boolean>;
-    readonly beforeExit?: (route: Route<S, P, Q>, params: P, store: S, currentQueryParams: Q, nextPath: string) => void | boolean | Promise<boolean>;
-    readonly onParamsChange?: (route: Route<S, P, Q>, params: P, store: S, currentQueryParams: Q) => void;
-    readonly onExit?: (route: Route<S, P, Q>, params: P, store: S, currentQueryParams: Q, nextPath: string) => void;
+    readonly onEnter?: (
+        route: Route<S, P, Q>,
+        params: P,
+        store: S,
+        currentQueryParams: Q
+    ) => void;
+    readonly beforeEnter?: (
+        route: Route<S, P, Q>,
+        params: P,
+        store: S,
+        currentQueryParams: Q,
+        nextPath: string
+    ) => void | boolean | Promise<boolean>;
+    readonly beforeExit?: (
+        route: Route<S, P, Q>,
+        params: P,
+        store: S,
+        currentQueryParams: Q,
+        nextPath: string
+    ) => void | boolean | Promise<boolean>;
+    readonly onParamsChange?: (
+        route: Route<S, P, Q>,
+        params: P,
+        store: S,
+        currentQueryParams: Q
+    ) => void;
+    readonly onExit?: (
+        route: Route<S, P, Q>,
+        params: P,
+        store: S,
+        currentQueryParams: Q,
+        nextPath: string
+    ) => void;
 
     constructor({
         path,
@@ -42,18 +72,17 @@ export class Route<
         onParamsChange,
         beforeEnter,
         onExit,
-        title,
+        title
     }: {
-        path: string,
-        component: JSX.Element,
-        onEnter?: Route<S, P, Q>["onEnter"],
-        beforeExit?: Route<S, P, Q>["beforeExit"],
-        onParamsChange?: Route<S, P, Q>["onParamsChange"],
-        beforeEnter?: Route<S, P, Q>["beforeEnter"];
-        onExit?: Route<S, P, Q>["onExit"];
-        title?: string
+        path: string;
+        component: JSX.Element;
+        onEnter?: Route<S, P, Q>['onEnter'];
+        beforeExit?: Route<S, P, Q>['beforeExit'];
+        onParamsChange?: Route<S, P, Q>['onParamsChange'];
+        beforeEnter?: Route<S, P, Q>['beforeEnter'];
+        onExit?: Route<S, P, Q>['onExit'];
+        title?: string;
     }) {
-
         this.path = path;
         this.component = component;
         this.onEnter = onEnter;
@@ -119,14 +148,16 @@ export class Route<
 
         return `${newPath}${
             hasQueryParams ? `?${queryParamsString}` : ''
-            }`.toString();
+        }`.toString();
     }
 
     /*
    converts an array of params [123, 100] to an object
    Example: if the current this.path is /book/:id/page/:pageId it will return {id:123, pageId:100}
    */
-    getParamsObject(paramValues: Exclude<P, undefined>[keyof Exclude<P, undefined>][]) {
+    getParamsObject(
+        paramValues: Exclude<P, undefined>[keyof Exclude<P, undefined>][]
+    ) {
         const params = [] as (keyof Exclude<P, undefined>)[];
         getRegexMatches(
             this.originalPath,

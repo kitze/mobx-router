@@ -15,7 +15,7 @@ test('Hash routing Scenario', () => {
     expect(window.location.pathname).toBe('/');
     expect(window.location.hash).toBe('#/');
 
-    router.goTo(routes.profile, { username: 'kitze' }, { id: "123" });
+    router.goTo(routes.profile, { username: 'kitze' }, { id: '123' });
     expect(router.currentPath).toBe('/profile/kitze?id=123');
     expect(window.location.pathname).toBe('/');
     expect(window.location.hash).toBe('#/profile/kitze?id=123');

@@ -16,7 +16,7 @@
     "lint": "eslint . --ext .ts,.tsx --ignore-path .gitignore",
     "test": "jest",
     "build": "del-cli dist && tsc",
-    "format": "prettier --print-width 80 --tab-width 4 --single-quote --write '{src,tests}/**/*.js'",
+    "format": "prettier --print-width 80 --tab-width 4 --single-quote --write {src,tests}/**/*.{ts,tsx}",
     "precommit": "lint-staged"
   },
   "repository": {
@@ -65,8 +65,8 @@
     "typescript": "^3.8.3"
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --print-width 80 --tab-width 4 --single-quote --write",
+    "*.{ts, tsx}": [
+      "npm run format",
       "git add"
     ]
   }

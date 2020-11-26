@@ -8,15 +8,11 @@ type Props = { store: Store };
 export const MobxRouter = observer(({ store: { router } }: Props) => {
     return (
         <>
-            {
-                router.currentRoute && router.currentRoute.component
-                    ? (
-                        router.currentRoute.component
-                    )
-                    : (
-                        <div />
-                    )
-            }
+            {router.currentRoute && router.currentRoute.component ? (
+                router.currentRoute.component
+            ) : (
+                <div />
+            )}
         </>
     );
 });

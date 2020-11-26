@@ -7,8 +7,11 @@ import { viewsForDirector, DirectorConfig } from './utils';
 import { RoutesConfig } from './route';
 import { Store } from './router-store';
 
-
-const createDirectorRouter = <T extends Store>(views: RoutesConfig<T>, store: T, config: DirectorConfig = {}) => {
+const createDirectorRouter = <T extends Store>(
+    views: RoutesConfig<T>,
+    store: T,
+    config: DirectorConfig = {}
+) => {
     new Router({
         ...viewsForDirector(views, store, config)
     })
@@ -20,11 +23,11 @@ const createDirectorRouter = <T extends Store>(views: RoutesConfig<T>, store: T,
 export const startRouter = <T extends Store>(
     routes: RoutesConfig<T>,
     store: T,
-    config: DirectorConfig = {},
+    config: DirectorConfig = {}
 ) => {
     //create director configuration
     const defaultDirectorConfig = {
-        html5history: true,
+        html5history: true
     };
 
     const directorConfig = Object.assign(defaultDirectorConfig, config);
@@ -35,13 +38,16 @@ export const startRouter = <T extends Store>(
         const { currentPath } = store.router;
         if (currentPath) {
             if (directorConfig.html5history) {
-                if (currentPath !== (window.location.pathname + window.location.search)) {
-                    window.history.pushState(null, null || "", currentPath);
+                if (
+                    currentPath !==
+                    window.location.pathname + window.location.search
+                ) {
+                    window.history.pushState(null, null || '', currentPath);
                 }
             } else {
                 const hash = `#${currentPath}`;
                 if (hash !== window.location.hash) {
-                    window.history.pushState(null, null || "", `/${hash}`);
+                    window.history.pushState(null, null || '', `/${hash}`);
                 }
             }
         }
