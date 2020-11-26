@@ -33,9 +33,9 @@ export const startRouter = <T extends Store>(routes: RoutesConfig<T>, store: T, 
                     window.history.pushState(null, null || "", currentPath);
                 }
             } else {
-                const hash = `#${currentPath}`
+                const hash = `#${currentPath}`;
                 if (hash !== window.location.hash) {
-                    window.history.pushState(null, null || "", `/${hash}`)
+                    window.history.pushState(null, null || "", `/${hash}`);
                 }
             }
         }
