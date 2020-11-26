@@ -12,30 +12,36 @@ const createDirectorRouter = <T extends Store>(views: RoutesConfig<T>, store: T,
     new Router({
         ...viewsForDirector(views, store, config)
     })
-        .configure({
-            html5history: true,
-            ...config
-        })
+        .configure(config)
         // set fallback to /#/ only when hash routing
         .init(config.html5history === false ? '/' : undefined);
 };
 
-export const startRouter = <T extends Store>(routes: RoutesConfig<T>, store: T, config: DirectorConfig = {}) => {
+export const startRouter = <T extends Store>(
+    routes: RoutesConfig<T>,
+    store: T,
+    config: DirectorConfig = {},
+) => {
     //create director configuration
-    createDirectorRouter<T>(routes, store, config);
+    const defaultDirectorConfig = {
+        html5history: true,
+    };
+
+    const directorConfig = Object.assign(defaultDirectorConfig, config);
+    createDirectorRouter<T>(routes, store, directorConfig);
 
     //autorun and watch for path changes
     autorun(() => {
         const { currentPath } = store.router;
         if (currentPath) {
-            if (config.html5history) {
+            if (directorConfig.html5history) {
                 if (currentPath !== (window.location.pathname + window.location.search)) {
                     window.history.pushState(null, null || "", currentPath);
                 }
             } else {
-                const hash = `#${currentPath}`
+                const hash = `#${currentPath}`;
                 if (hash !== window.location.hash) {
-                    window.history.pushState(null, null || "", `/${hash}`)
+                    window.history.pushState(null, null || "", `/${hash}`);
                 }
             }
         }

@@ -1,4 +1,4 @@
-import { RoutesConfig, QueryParams } from "./route";
+import { RoutesConfig, QueryParams, RouteParams } from "./route";
 import { Store } from "./router-store";
 import queryString from 'query-string';
 
@@ -15,18 +15,21 @@ export const viewsForDirector = <T extends Store>(views: RoutesConfig<T>, store:
     getObjectKeys(views).reduce((obj, viewKey) => {
         const view = views[viewKey];
         obj[view.path] = (...paramsArr) => {
+            const paramsObject = paramsArr
+                ? view.getParamsObject(paramsArr)
+                : undefined;
             let queryParamsObject;
             if (config.html5history === false) {
                 // hash routing (query parameter not stored in location.search)
-                const m = window.location.hash.match(/\?.*$/)
+                const m = window.location.hash.match(/\?.*$/);
                 if (m) {
                     queryParamsObject = queryString.parse(m[0]);
                 }
             } else {
                 queryParamsObject = queryString.parse(window.location.search);
             }
-            store.router.goTo(view as any, paramsArr as any, queryParamsObject as QueryParams);
-        }
+            store.router.goTo(view as any, paramsObject || {} as RouteParams, queryParamsObject as QueryParams);
+        };
         return obj;
     }, {} as { [path: string]: (...paramsArr: string[]) => any });
 
