@@ -3,7 +3,9 @@ import { Store } from "./router-store";
 import queryString from 'query-string';
 
 export interface DirectorConfig {
-    html5history?: boolean
+    html5history?: boolean;
+    notfound?(): void;
+    [key: string]: any;
 }
 
 export const isObject = (obj: any) =>

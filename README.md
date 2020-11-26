@@ -142,10 +142,37 @@ const routes = {
 export default routes;
 ```
 
-### Hash-based routing
-Just add option for `startRouter` (no need to include `#` in route paths).
+### Custom director configuration
+
+*mobx-router* uses [director](https://github.com/flatiron/director) behind the screens. mobx-router exposes the director config object for you to pass your own configuration to director.
+
+To do this you must pass a `DirectorConfig` object as third argument of `startRouter` method.
+
+**Hash based Routing | html5history**
+
+If you disable html5history option, mobx will fallback to hash based routing. 
 ```js
-startRouter(routes, store, {
-  html5history: false
-});
+startRouter(
+  routes, 
+  store, 
+  {
+    // https://github.com/flatiron/director#configuration
+    html5history: false,
+  }
+);
+```
+
+**Not found (404) route | notfound**
+
+You can pass a function to `notfound` which will be called when you don't have any matching route for the current path.
+
+```js
+startRouter(
+  routes, 
+  store, 
+  {
+    // https://github.com/flatiron/director#configuration
+    notfound: () => store.router.goTo(YOUR_NOT_FOUND_ROUTE),
+  }
+);
 ```
