@@ -5,8 +5,8 @@ import {
     isObject,
     getObjectKeys,
     getRegexMatches,
-    DirectorConfig
 } from '../src/utils';
+import type { DirectorConfig } from '../src/utils';
 import { paramRegex } from '../src/regex';
 import { Route } from '../src/route';
 import { Store } from '../src/router-store';
@@ -15,24 +15,24 @@ test('viewsForDirector', () => {
     const views = {
         home: new Route({
             path: '/',
-            component: <div />
+            component: <div />,
         }),
         userProfile: new Route({
             path: '/profile/:username/:tab',
-            component: <div />
+            component: <div />,
         }),
         gallery: new Route({
             path: '/gallery',
-            component: <div />
-        })
+            component: <div />,
+        }),
     };
 
     const result = viewsForDirector(views, {} as Store, {} as DirectorConfig);
     const keys = Object.keys(result);
-    const values = keys.map(k => result[k]);
+    const values = keys.map((k) => result[k]);
 
     expect(keys).toEqual(['/', '/profile/:username/:tab', '/gallery']);
-    values.forEach(value => {
+    values.forEach((value) => {
         expect(typeof value).toEqual('function');
     });
 });
@@ -57,14 +57,14 @@ test('getRegexMatches', () => {
     const paramsArray = [] as string[];
     const path = '/profile/user/:username/:tab?';
 
-    getRegexMatches(path, paramRegex, match => {
+    getRegexMatches(path, paramRegex, (match) => {
         paramsArray.push(match[2]);
     });
 
     const paramsArray2 = [] as string[];
     const path2 = '/profile';
 
-    getRegexMatches(path2, paramRegex, match => {
+    getRegexMatches(path2, paramRegex, (match) => {
         paramsArray2.push(match[2]);
     });
 

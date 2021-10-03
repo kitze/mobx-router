@@ -4,29 +4,28 @@ import queryString from 'query-string';
 import { paramRegex, optionalRegex } from './regex';
 import { getRegexMatches } from './utils';
 import { Store } from './router-store';
+import { ReactNode } from 'react';
 
 export type RoutesConfig<T extends Store> = {
     [path: string]: Route<T, any, any>;
 };
 
 export type QueryParams =
-    | {
-          [key: string]: string | number | undefined | boolean;
-      }
+    | Record<string, string | number | undefined | boolean>
     | undefined;
 
 export type RouteParams = QueryParams;
 
 export class Route<
     S extends Store,
-    P extends RouteParams = {},
-    Q extends QueryParams = {}
+    P extends RouteParams = RouteParams,
+    Q extends QueryParams = QueryParams
 > {
     //props
     path: string;
     readonly originalPath: string;
     readonly rootPath: string;
-    readonly component: React.ReactNode;
+    readonly component: ReactNode;
     readonly title?: string;
 
     //lifecycle methods
@@ -72,7 +71,7 @@ export class Route<
         onParamsChange,
         beforeEnter,
         onExit,
-        title
+        title,
     }: {
         path: string;
         component: JSX.Element;

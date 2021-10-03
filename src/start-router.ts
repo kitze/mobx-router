@@ -1,4 +1,3 @@
-// @ts-ignore
 import { Router } from 'director/build/director';
 
 import { autorun } from 'mobx';
@@ -13,7 +12,7 @@ const createDirectorRouter = <T extends Store>(
     config: DirectorConfig = {}
 ) => {
     new Router({
-        ...viewsForDirector(views, store, config)
+        ...viewsForDirector(views, store, config),
     })
         .configure(config)
         // set fallback to /#/ only when hash routing
@@ -27,7 +26,7 @@ export const startRouter = <T extends Store>(
 ) => {
     //create director configuration
     const defaultDirectorConfig = {
-        html5history: true
+        html5history: true,
     };
 
     const directorConfig = Object.assign(defaultDirectorConfig, config);

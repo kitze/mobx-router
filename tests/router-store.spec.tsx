@@ -9,12 +9,12 @@ const path = '/profile/:username/:tab';
 const routes = {
     home: new Route<any>({
         path: '/',
-        component: <>HOME</>
+        component: <>HOME</>,
     }),
     profile: new Route<any>({
         path,
-        component: <div />
-    })
+        component: <div />,
+    }),
 };
 
 describe('RouterStore', () => {
@@ -33,20 +33,20 @@ describe('RouterStore', () => {
 
     test('if currentRoute is observable', () => {
         const store = {
-            router: new RouterStore({} as any)
+            router: new RouterStore({} as any),
         };
 
         startRouter(routes, store);
         const reactionCallback = jest.fn();
         const dispose = reaction(
             () => store.router.currentRoute,
-            route => reactionCallback(toJS(route))
+            (route) => reactionCallback(toJS(route))
         );
         store.router.goTo(routes.profile);
 
         expect(reactionCallback).toHaveBeenCalledWith(
             expect.objectContaining({
-                path: path
+                path: path,
             })
         );
 

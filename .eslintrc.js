@@ -13,36 +13,15 @@ module.exports = {
         ecmaFeatures: {
             experimentalObjectRestSpread: true
         },
-        sourceType: 'module'
+        sourceType: 'module',
     },
-    extends: ['eslint:recommended'],
+    extends: [
+        'eslint:recommended',
+        "plugin:@typescript-eslint/recommended",
+        'prettier'
+    ],
     rules: {
-        'arrow-spacing': 'error',
-        'block-spacing': 'error',
-        'comma-dangle': 'off',
-        'comma-spacing': 'error',
-        'comma-style': 'error',
-        curly: 'error',
-        'dot-notation': 'error',
-        eqeqeq: 'error',
-        'eol-last': 'error',
-        'key-spacing': 'error',
-        'keyword-spacing': 'error',
-        'linebreak-style': ['error', 'unix'],
-        'no-console': 'off',
-        'no-param-reassign': 'error',
-        'no-tabs': 'error',
-        'no-trailing-spaces': 'error',
-        'no-underscore-dangle': 'error',
-        'no-var': 'error',
-        'no-whitespace-before-property': 'error',
-        'prefer-const': 'error',
-        semi: ['error', 'always'],
-        'semi-spacing': 'error',
-        'space-before-blocks': 'error',
-        'space-before-function-paren': ['error', 'never'],
-        'space-in-parens': 'error',
-        'no-unused-vars': 'off',
-        '@typescript-eslint/no-unused-vars': ['error']
+        '@typescript-eslint/no-explicit-any': "off",
+        '@typescript-eslint/explicit-module-boundary-types': "off"
     }
 };

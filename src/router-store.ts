@@ -1,4 +1,11 @@
-import { observable, computed, action, toJS, runInAction } from 'mobx';
+import {
+    observable,
+    computed,
+    action,
+    toJS,
+    runInAction,
+    makeObservable,
+} from 'mobx';
 import { Route } from '.';
 import { RouteParams, QueryParams } from './route';
 
@@ -7,25 +14,37 @@ export type Store = {
 };
 
 export class RouterStore<S extends Store> {
-    @observable params: RouteParams = {};
-    @observable queryParams: QueryParams = {};
-    @observable currentRoute?: Route<S, any, any>;
+    params: RouteParams = {};
+    queryParams: QueryParams = {};
+    currentRoute?: Route<S, any, any>;
 
     readonly store: S;
 
     constructor(store: S) {
+        makeObservable(this, {
+            params: observable,
+            queryParams: observable,
+            currentRoute: observable,
+            goTo: action,
+            currentPath: computed,
+        });
+
         this.store = store;
 
         //bind
         this.goTo = this.goTo.bind(this);
     }
 
-    @action
-    async goTo<P extends RouteParams = {}, Q extends QueryParams = {}>(
-        route: Route<S, P, Q>,
-        paramsObj?: P,
-        queryParamsObj?: Q
-    ) {
+    async goTo<
+        P extends RouteParams = Record<
+            string,
+            string | number | undefined | boolean
+        >,
+        Q extends QueryParams = Record<
+            string,
+            string | number | undefined | boolean
+        >
+    >(route: Route<S, P, Q>, paramsObj?: P, queryParamsObj?: Q) {
         const nextPath = route.replaceUrlParams(paramsObj, queryParamsObj);
         const pathChanged = nextPath !== this.currentPath;
 
@@ -68,7 +87,7 @@ export class RouterStore<S extends Store> {
         routeChanged &&
             this.currentRoute &&
             this.currentRoute.onExit &&
-            (this.currentRoute as Route<S, P, Q>).onExit!(
+            this.currentRoute.onExit(
                 this.currentRoute,
                 currentParams as P,
                 this.store,
@@ -100,7 +119,6 @@ export class RouterStore<S extends Store> {
             );
     }
 
-    @computed
     get currentPath() {
         return this.currentRoute
             ? this.currentRoute.replaceUrlParams(this.params, this.queryParams)

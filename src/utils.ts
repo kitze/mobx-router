@@ -1,4 +1,4 @@
-import { RoutesConfig, QueryParams, RouteParams } from './route';
+import type { RoutesConfig, QueryParams, RouteParams } from './route';
 import { Store } from './router-store';
 import queryString from 'query-string';
 
@@ -28,7 +28,7 @@ export const viewsForDirector = <T extends Store>(
             let queryParamsObject;
             if (config.html5history === false) {
                 // hash routing (query parameter not stored in location.search)
-                const m = window.location.hash.match(/\?.*$/);
+                const m = /\?.*$/.exec(window.location.hash);
                 if (m) {
                     queryParamsObject = queryString.parse(m[0]);
                 }

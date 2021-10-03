@@ -18,7 +18,7 @@ const UserProfile = observer(() => {
                 onClick={() =>
                     router.goTo(routes.profile, {
                         username: 'john',
-                        tab: 'tab1'
+                        tab: 'tab1',
                     })
                 }
             >
@@ -30,7 +30,7 @@ const UserProfile = observer(() => {
                 onClick={() =>
                     router.goTo(routes.profile, {
                         username: 'john',
-                        tab: 'tab2'
+                        tab: 'tab2',
                     })
                 }
             >
@@ -50,8 +50,8 @@ const UserProfile = observer(() => {
 const routes = {
     profile: new Route<RootStore, { username: string; tab: string }>({
         path: '/profile/:username/:tab',
-        component: <UserProfile />
-    })
+        component: <UserProfile />,
+    }),
 };
 
 test('UserProfile changes tabs when a tab button is clicked', async () => {
@@ -65,5 +65,5 @@ test('UserProfile changes tabs when a tab button is clicked', async () => {
 
     fireEvent.click(buttonTab2El);
 
-    await waitFor(() => findByText('Tab 2 Content'));
+    await waitFor(() => expect(findByText('Tab 2 Content')).resolves.not.toBe);
 });

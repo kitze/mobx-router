@@ -2,7 +2,6 @@
 
 # Compiled output
 /dist
-/types
 
 # Dependencies
 /node_modules

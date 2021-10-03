@@ -6,10 +6,11 @@ const rootStore = new RootStore();
 
 test('Hash routing Scenario', () => {
     startRouter(routes, rootStore, {
-        html5history: false
+        html5history: false,
     });
     const { router } = rootStore;
-    router.currentRoute = routes.home;
+
+    router.goTo(routes.home);
 
     expect(router.currentPath).toBe('/');
     expect(window.location.pathname).toBe('/');
