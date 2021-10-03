@@ -17,7 +17,7 @@ const LinkBase = <
     style = {},
     children,
     title,
-    router
+    router,
 }: React.PropsWithChildren<{
     route: Route<S, P, Q>;
     className?: string;
@@ -38,7 +38,7 @@ const LinkBase = <
         <a
             style={style}
             className={className}
-            onClick={e => {
+            onClick={(e) => {
                 const middleClick = e.button === 2;
                 const cmdOrCtrl = e.metaKey || e.ctrlKey;
                 const openinNewTab = middleClick || cmdOrCtrl;

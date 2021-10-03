@@ -4,5 +4,5 @@ export const mocks = {
     enteringProfile: jest.fn(),
     exitingProfile: jest.fn(),
     changingParamsProfile: jest.fn(),
-    changingParamsHome: jest.fn()
+    changingParamsHome: jest.fn(),
 };

@@ -72,7 +72,7 @@ export class Route<
         onParamsChange,
         beforeEnter,
         onExit,
-        title
+        title,
     }: {
         path: string;
         component: JSX.Element;
