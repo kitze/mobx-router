@@ -6,7 +6,7 @@ const rootStore = new RootStore();
 
 test('Router Scenario', () => {
     const { router } = rootStore;
-    router.currentRoute = routes.home;
+    router.setCurrentRoute(routes.home);
 
     expect(router.currentPath).toBe('/');
 
@@ -43,7 +43,7 @@ test('Router Scenario', () => {
     expect(mocks.exitingProfile).toBeCalled();
     expect(mocks.exitingProfile).lastCalledWith({
         tab: 'about',
-        username: 'kristijan'
+        username: 'kristijan',
     });
     expect(mocks.enteringHome).toBeCalled();
     expect(mocks.enteringHome).lastCalledWith();
@@ -72,7 +72,7 @@ test('Router Scenario', () => {
         routes.profile,
         { username: 'kristijan', tab: 'about' },
         {
-            id: '123'
+            id: '123',
         }
     );
 
