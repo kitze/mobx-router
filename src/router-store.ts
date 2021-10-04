@@ -1,7 +1,7 @@
 import {
-    observable,
-    makeObservable,
     computed,
+    makeObservable,
+    observable,
     action,
     toJS,
     runInAction,
@@ -124,6 +124,7 @@ export class RouterStore<S extends Store> {
             );
     }
 
+    @computed
     get currentPath() {
         return this.currentRoute
             ? this.currentRoute.replaceUrlParams(this.params, this.queryParams)

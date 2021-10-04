@@ -16,7 +16,7 @@ export const routes = {
         },
         onParamsChange: () => {
             mocks.changingParamsHome();
-        },
+        }
     }),
     profile: new Route<
         Store,
@@ -39,6 +39,6 @@ export const routes = {
         },
         onParamsChange: (route, params, store, queryParams) => {
             mocks.changingParamsProfile(params, queryParams);
-        },
-    }),
+        }
+    })
 };
