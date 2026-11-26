@@ -44,7 +44,7 @@
     "react": ">= 16.8"
   },
   "devDependencies": {
-    "@testing-library/react": "^10.0.3",
+    "@testing-library/react": "^12.1.5",
     "@types/enzyme": "^3.10.5",
     "@types/jest": "^25.2.1",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
